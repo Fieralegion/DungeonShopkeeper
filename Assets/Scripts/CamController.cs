@@ -18,8 +18,8 @@ public class CamController : MonoBehaviour
     public void Awake()
     {
         targetRotation = player.transform.rotation;
-        Cursor.lockState = CursorLockMode.Locked;
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         camDelegate = InputsFunct;

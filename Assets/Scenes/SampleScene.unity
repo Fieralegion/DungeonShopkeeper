@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 424619313}
   - component: {fileID: 424619312}
   m_Layer: 0
-  m_Name: Shopper
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 431846320}
   - component: {fileID: 431846319}
   - component: {fileID: 431846318}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -518,7 +518,7 @@ GameObject:
   - component: {fileID: 659446520}
   - component: {fileID: 659446519}
   - component: {fileID: 659446518}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -790,7 +790,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34dcd92be8fef1c46982bbb279271cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 90
+  player: {fileID: 424619311}
+  _90DegreesRotationSpeed: 90
+  FPSRotationSpeed: 1
 --- !u!1 &1113810995
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,7 +805,7 @@ GameObject:
   - component: {fileID: 1113810998}
   - component: {fileID: 1113810997}
   - component: {fileID: 1113810996}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shields (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -898,7 +900,7 @@ GameObject:
   - component: {fileID: 1142050623}
   - component: {fileID: 1142050622}
   - component: {fileID: 1142050621}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shields
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1183,7 +1185,7 @@ GameObject:
   - component: {fileID: 1373798431}
   - component: {fileID: 1373798430}
   - component: {fileID: 1373798429}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1278,7 +1280,7 @@ GameObject:
   - component: {fileID: 1396360748}
   - component: {fileID: 1396360747}
   - component: {fileID: 1396360746}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1469,7 +1471,7 @@ GameObject:
   - component: {fileID: 1615155398}
   - component: {fileID: 1615155397}
   - component: {fileID: 1615155396}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1564,7 +1566,7 @@ GameObject:
   - component: {fileID: 1632627210}
   - component: {fileID: 1632627209}
   - component: {fileID: 1632627208}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1659,7 +1661,7 @@ GameObject:
   - component: {fileID: 1745505216}
   - component: {fileID: 1745505215}
   - component: {fileID: 1745505214}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shields (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1754,7 +1756,7 @@ GameObject:
   - component: {fileID: 1886860373}
   - component: {fileID: 1886860372}
   - component: {fileID: 1886860371}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1849,7 +1851,7 @@ GameObject:
   - component: {fileID: 1923648191}
   - component: {fileID: 1923648190}
   - component: {fileID: 1923648189}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1944,7 +1946,7 @@ GameObject:
   - component: {fileID: 1975318170}
   - component: {fileID: 1975318169}
   - component: {fileID: 1975318168}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Items
   m_TagString: Untagged
   m_Icon: {fileID: 0}

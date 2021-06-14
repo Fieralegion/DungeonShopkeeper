@@ -4,54 +4,70 @@ using UnityEngine;
 
 public class CamController : MonoBehaviour
 {
-    public float rotationSpeed;
+    public GameObject player; // mover a libreria
+    [SerializeField] private float _90DegreesRotationSpeed;
     Quaternion targetRotation;
-    Coroutine rotationCoroutine;
 
-    public void Start()
+    [SerializeField] private float FPSRotationSpeed;
+    private float xRotation = 0.0f;
+    private float yRotation = 0.0f;
+
+    private delegate void CamDelegate();
+    CamDelegate camDelegate;
+
+    public void Awake()
     {
-        targetRotation = transform.rotation;
+        targetRotation = player.transform.rotation;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+
+        camDelegate = InputsFunct;
+        camDelegate += FPSCamMovement;
     }
-    private void Update()
+    private void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button14)) Debug.Log(KeyCode.Joystick1Button14);
-
-        if (Input.GetButtonDown("Right") /*|| Input.mousePosition.x >= Screen.width * .1f*/)
-        {
-            RotateCam(90);
-        }
-        if (Input.GetButtonDown("Left") /*|| Input.mousePosition.x <= Screen.width * (1 - .1f)*/)
-        {
-            RotateCam(-90);
-        }
+        camDelegate?.Invoke();
     }
 
-    void RotateCam(float degrees)
+    void InputsFunct()
     {
-        // Spin our target rotation in the desired direction.
-        targetRotation = Quaternion.Euler(0, degrees, 0) * targetRotation;
-
-        // If we're not already rotating, start a new rotation.
-        // (Otherwise, the coroutine will automatically handle the new target)
-        if (rotationCoroutine == null)
-            rotationCoroutine = StartCoroutine(RotationCoroutine());
-
-        IEnumerator RotationCoroutine()
+        if (Input.GetButtonDown("Right"))
         {
-            // Until our current rotation aligns with the target...
-            while (Quaternion.Dot(transform.rotation, targetRotation) < 1f)
-            {
-                // Rotate at a consistent speed toward the target.
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-
-                // Wait a frame, then resume.
-                yield return null;
-            }
-
-            // Clear the coroutine so the next input starts a fresh one.
-            rotationCoroutine = null;
+            StartCoroutine(RotateCam(90));
+        }
+        if (Input.GetButtonDown("Left"))
+        {
+            StartCoroutine(RotateCam(-90));
         }
     }
 
+    IEnumerator RotateCam(float degrees)
+    {
+        camDelegate -= InputsFunct;
+        targetRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y + degrees, 0);
+
+        do
+        {
+            player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, _90DegreesRotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+        while (Mathf.Abs(Quaternion.Angle(player.transform.rotation, targetRotation)) > .5f);
+        
+        player.transform.rotation = targetRotation;
+        camDelegate += InputsFunct;
+    }
+
+    void FPSCamMovement()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * FPSRotationSpeed;
+        float mouseY = Input.GetAxis("Mouse Y") * FPSRotationSpeed;
+
+        yRotation -= mouseY;
+        xRotation += mouseX;
+        xRotation = Mathf.Clamp(xRotation, -45, 45);
+        yRotation = Mathf.Clamp(yRotation, -45, 45);
+
+        transform.localEulerAngles= new Vector3(yRotation, xRotation, 0);
+    }
 }

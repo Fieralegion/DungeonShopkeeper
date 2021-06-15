@@ -20,7 +20,7 @@ public class CamController : MonoBehaviour
         targetRotation = player.transform.rotation;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.visible = true;
 
         camDelegate = InputsFunct;
         camDelegate += FPSCamMovement;

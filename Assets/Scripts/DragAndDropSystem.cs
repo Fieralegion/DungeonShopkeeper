@@ -6,46 +6,49 @@ public class DragAndDropSystem : MonoBehaviour
 {
     GameObject getTarget;
     bool isDragged;
-    Vector3 offset;
-    Vector3 positionOfScreen;
+    float distance;
 
-    void Update()
+    void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Drag();
+            BeginDrag();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            isDragged = false;
+            EndDragg();
         }
 
         if (isDragged)
         {
-            Dragged();
+            Dragged(ref distance);
         }
     }
 
-    void Drag()
+    void BeginDrag()
     {
         getTarget = ReturnClickedObject(out RaycastHit hit);
         if (getTarget != null)
         {
             isDragged = true;
-
-            positionOfScreen = Camera.main.WorldToScreenPoint(getTarget.transform.position);
-            offset = getTarget.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z));
+            distance = Vector3.Distance(Camera.main.transform.position, getTarget.transform.position);
         }
     }
 
-    void Dragged()
+    void Dragged(ref float dist)
     {
-        Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, positionOfScreen.z);
+        dist += Input.mouseScrollDelta.y;
+        Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist);
 
-        Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace) + offset;
+        Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace);
 
         getTarget.transform.position = currentPosition;
+    }
+
+    void EndDragg()
+    {
+        isDragged = false;
     }
 
     GameObject ReturnClickedObject(out RaycastHit hit)

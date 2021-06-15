@@ -13,14 +13,14 @@ public class CamController : MonoBehaviour
     private float yRotation = 0.0f;
 
     private delegate void CamDelegate();
-    CamDelegate camDelegate;
+    private CamDelegate camDelegate;
 
     public void Awake()
     {
         targetRotation = player.transform.rotation;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        Cursor.visible = false;
 
         camDelegate = InputsFunct;
         camDelegate += FPSCamMovement;
@@ -32,17 +32,18 @@ public class CamController : MonoBehaviour
 
     void InputsFunct()
     {
-        if (Input.GetButtonDown("Right"))
+        Debug.Log(transform.localEulerAngles.y);
+        if (Input.GetButtonDown("Right") || transform.localEulerAngles.y >= 45)
         {
-            StartCoroutine(RotateCam(90));
+            StartCoroutine(RotatePlayer(90));
         }
-        if (Input.GetButtonDown("Left"))
+        if (Input.GetButtonDown("Left") || transform.localEulerAngles.y <= -45)
         {
-            StartCoroutine(RotateCam(-90));
+            StartCoroutine(RotatePlayer(-90));
         }
     }
 
-    IEnumerator RotateCam(float degrees)
+    IEnumerator RotatePlayer(float degrees)
     {
         camDelegate -= InputsFunct;
         targetRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y + degrees, 0);

@@ -33,11 +33,11 @@ public class CamController : MonoBehaviour
     void InputsFunct()
     {
         Debug.Log(transform.localEulerAngles.y);
-        if (Input.GetButtonDown("Right") || transform.localEulerAngles.y >= 45)
+        if (Input.GetButtonDown("Right"))
         {
             StartCoroutine(RotatePlayer(90));
         }
-        if (Input.GetButtonDown("Left") || transform.localEulerAngles.y <= -45)
+        if (Input.GetButtonDown("Left"))
         {
             StartCoroutine(RotatePlayer(-90));
         }

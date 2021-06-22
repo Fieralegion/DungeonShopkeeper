@@ -14,6 +14,9 @@ public class DragAndDropSystem : MonoBehaviour
     Color originalColor;
     HookChecker hookChecker;
 
+    private delegate void DadDelegate(RaycastHit hit);
+    private DadDelegate dadDelegate;
+
     void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
@@ -21,14 +24,14 @@ public class DragAndDropSystem : MonoBehaviour
             BeginDrag();
         }
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            EndDragg();
-        }
-
         if (isDragged)
         {
             Dragged();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            EndDragg();
         }
     }
 
@@ -39,10 +42,12 @@ public class DragAndDropSystem : MonoBehaviour
         if (getTarget != null)
         {
             isDragged = true;
+            getTarget.transform.parent = null;
             originalColor = getTarget.GetComponent<Renderer>().material.color;
             getTarget.GetComponent<Rigidbody>().isKinematic = true;
             getTarget.GetComponent<Rigidbody>().freezeRotation = true;
             typeOf = getTarget.GetComponent<Item>();
+            SwitchSelector();
         }
     }
 
@@ -55,54 +60,7 @@ public class DragAndDropSystem : MonoBehaviour
 
         if (Physics.Raycast(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back), out RaycastHit hit))
         {
-            switch (typeOf._item)
-            {
-                case Item.TypeOfItem.Product:
-                    if (hit.collider.CompareTag("Attachment"))
-                    {
-                        hookChecker = hit.collider.GetComponent<HookChecker>();
-                        if (hookChecker.canUse)
-                        {
-                            getTarget.GetComponent<Renderer>().material.color = Color.green;
-                            attachmentTransform = hit.collider.transform;
-                            canBeAttached = true;
-
-                            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
-                        }
-                    }
-                    else
-                    {
-                        getTarget.GetComponent<Renderer>().material.color = Color.red;
-                        canBeAttached = false;
-
-                        Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
-                    }
-                    break;
-                case Item.TypeOfItem.Money:
-                    if (hit.collider.CompareTag("CashBox"))
-                    {
-                        getTarget.GetComponent<Renderer>().material.color = Color.green;
-                        attachmentTransform = hit.collider.transform;
-                        canBeAttached = true;
-
-                        Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
-                    }
-                    else
-                    {
-                        getTarget.GetComponent<Renderer>().material.color = Color.red;
-                        canBeAttached = false;
-
-                        Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
-                    }
-                    break;
-                default:
-                    break;
-            }
-            //if (hit.collider.CompareTag("Customer"))
-            //{
-            //    //funcion CompleteSale de la clase Customer.
-            //}
-           
+            dadDelegate?.Invoke(hit);
         }
     }
 
@@ -118,10 +76,11 @@ public class DragAndDropSystem : MonoBehaviour
             switch (typeOf._item)
             {
                 case Item.TypeOfItem.Product:
-                    if (canBeAttached && hookChecker.canUse)
+                    if (canBeAttached && hookChecker.transform.childCount == 0)
                     {
                         getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
                         getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
+                        getTarget.transform.parent = hookChecker.transform;
                     }
                     else
                         getTarget.GetComponent<Rigidbody>().isKinematic = false;
@@ -153,5 +112,65 @@ public class DragAndDropSystem : MonoBehaviour
                 target = null;
         }
         return target;
+    }
+
+    void SwitchSelector()
+    {
+        switch (typeOf._item)
+        {
+            case Item.TypeOfItem.Product:
+                dadDelegate = CaseProduct;
+                break;
+            case Item.TypeOfItem.Money:
+                dadDelegate = CaseMoney;
+                break;
+            default:
+                break;
+        }
+        //if (hit.collider.CompareTag("Customer"))
+        //{
+        //    //funcion CompleteSale de la clase Customer.
+        //}
+    }
+
+    void CaseProduct(RaycastHit hit)
+    {
+        if (hit.collider.CompareTag("Attachment"))
+        {
+            hookChecker = hit.collider.GetComponent<HookChecker>();
+            if (hookChecker.transform.childCount == 0)
+            {
+                getTarget.GetComponent<Renderer>().material.color = Color.green;
+                attachmentTransform = hit.collider.transform;
+                canBeAttached = true;
+
+                Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
+            }
+        }
+        else
+        {
+            getTarget.GetComponent<Renderer>().material.color = Color.red;
+            canBeAttached = false;
+
+            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
+        }
+    }
+    void CaseMoney(RaycastHit hit)
+    {
+        if (hit.collider.CompareTag("CashBox"))
+        {
+            getTarget.GetComponent<Renderer>().material.color = Color.green;
+            attachmentTransform = hit.collider.transform;
+            canBeAttached = true;
+
+            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
+        }
+        else
+        {
+            getTarget.GetComponent<Renderer>().material.color = Color.red;
+            canBeAttached = false;
+
+            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
+        }
     }
 }

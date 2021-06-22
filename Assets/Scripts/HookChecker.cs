@@ -10,18 +10,34 @@ public class HookChecker : MonoBehaviour
         canUse = true;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Draggable"))
+        if (collision.collider.CompareTag("Draggable"))
         {
             canUse = false;
         }
     }
-    private void OnTriggerExit(Collider other)
+
+    private void OnCollisionExit(Collision collision)
     {
-        if (other.gameObject.CompareTag("Draggable"))
+        if (collision.collider.CompareTag("Draggable"))
         {
             canUse = true;
         }
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Draggable"))
+    //    {
+    //        canUse = false;
+    //    }
+    //}
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Draggable"))
+    //    {
+    //        canUse = true;
+    //    }
+    //}
 }

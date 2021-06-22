@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Draggable
   - Attachment
+  - CashBox
   layers:
   - Default
   - TransparentFX

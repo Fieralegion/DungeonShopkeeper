@@ -22,41 +22,12 @@ public class CamController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        //camDelegate = InputsFunct;
         camDelegate += FPSCamMovement;
     }
     private void LateUpdate()
     {
         camDelegate?.Invoke();
     }
-
-    //void InputsFunct()
-    //{
-    //    if (Input.GetButtonDown("Right"))
-    //    {
-    //        StartCoroutine(RotatePlayer(90));
-    //    }
-    //    if (Input.GetButtonDown("Left"))
-    //    {
-    //        StartCoroutine(RotatePlayer(-90));
-    //    }
-    //}
-
-    //IEnumerator RotatePlayer(float degrees)
-    //{
-    //    camDelegate -= InputsFunct;
-    //    targetRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y + degrees, 0);
-
-    //    do
-    //    {
-    //        player.transform.rotation = Quaternion.RotateTowards(player.transform.rotation, targetRotation, _90DegreesRotationSpeed * Time.deltaTime);
-    //        yield return null;
-    //    }
-    //    while (Mathf.Abs(Quaternion.Angle(player.transform.rotation, targetRotation)) > .5f);
-        
-    //    player.transform.rotation = targetRotation;
-    //    camDelegate += InputsFunct;
-    //}
 
     void FPSCamMovement()
     {
@@ -65,7 +36,6 @@ public class CamController : MonoBehaviour
 
         yRotation -= mouseY;
         xRotation += mouseX;
-        //xRotation = Mathf.Clamp(xRotation, -45, 45);
         yRotation = Mathf.Clamp(yRotation, -80, 80);
 
         transform.localEulerAngles= new Vector3(yRotation, xRotation, 0);

@@ -5,13 +5,13 @@ using UnityEngine;
 public class DragAndDropSystem : MonoBehaviour
 {
     private GameObject getTarget;
-    private Transform attachmentTransform;
+    private Transform attachmentTransform, customerTransform;
     private HookChecker hookChecker;
     private Item typeOfItem;
     private Color originalColor;
 
     private bool isDragged;
-    private bool canBeAttached;
+    private bool canBeAttached, canBeSold;
 
     private delegate void DraggedDelegate(RaycastHit hit);
     private DraggedDelegate draggedDelegate;
@@ -113,10 +113,18 @@ public class DragAndDropSystem : MonoBehaviour
                 Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
             }
         }
+        else if (hit.collider.CompareTag("Customer"))
+        {
+            getTarget.GetComponent<Renderer>().material.color = Color.green;
+            canBeSold = true;
+            customerTransform = hit.transform;
+            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
+        }
         else
         {
             getTarget.GetComponent<Renderer>().material.color = Color.red;
             canBeAttached = false;
+            canBeSold = false;
 
             Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
         }
@@ -147,6 +155,10 @@ public class DragAndDropSystem : MonoBehaviour
             getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
             getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
             getTarget.transform.parent = hookChecker.transform;
+        }
+        else if (canBeSold)
+        {
+            customerTransform.GetComponent<Customer>().CompleteSale(getTarget);
         }
         else
             getTarget.GetComponent<Rigidbody>().isKinematic = false;

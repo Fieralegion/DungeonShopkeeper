@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumLib;
 
 public class DragAndDropSystem : MonoBehaviour
 {
@@ -83,15 +84,13 @@ public class DragAndDropSystem : MonoBehaviour
     {
         switch (typeOfItem._item)
         {
-            case Item.TypeOfItem.Product:
-                draggedDelegate = CaseProductDragged;
-                endDragDelegate = CaseProductEndDrag;
-                break;
-            case Item.TypeOfItem.Money:
+            case itemType.Money:
                 draggedDelegate = CaseMoneyDragged;
                 endDragDelegate = CaseMoneyEndDrag;
                 break;
             default:
+                draggedDelegate = CaseProductDragged;
+                endDragDelegate = CaseProductEndDrag;
                 break;
         }
         //if (hit.collider.CompareTag("Customer"))

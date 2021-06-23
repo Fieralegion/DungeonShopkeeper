@@ -7,6 +7,10 @@ TagManager:
   - Draggable
   - Attachment
   - CashBox
+  - Customer
+  - RightBox
+  - DialogueHandler
+  - GlobalTimer
   layers:
   - Default
   - TransparentFX

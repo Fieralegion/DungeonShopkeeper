@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumLib;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,8 +10,7 @@ using UnityEditor;
 public class Item : MonoBehaviour
 {
     public float price;
-    public enum TypeOfItem { Product, Money}
-    public TypeOfItem _item;
+    public itemType _item;
 }
 
 #if UNITY_EDITOR

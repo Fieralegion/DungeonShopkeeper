@@ -47,7 +47,7 @@ public class CustomerSpawner : MonoBehaviour
         }
         else
         {
-            cust = customers[Random.Range(0, customers.Length - 1)];
+            cust = customers[Random.Range(0, customers.Length)];
         }
         GameObject go = Instantiate(cust, RandomPoint(), transform.rotation);
         go.GetComponent<Customer>().SetDestination(stopPoint.transform.position + customerList.Count * Vector3.left * 2);

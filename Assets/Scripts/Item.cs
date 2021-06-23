@@ -8,7 +8,6 @@ using UnityEditor;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
-    public GameObject model; //no necesario?
     public float price;
     public enum TypeOfItem { Product, Money}
     public TypeOfItem _item;

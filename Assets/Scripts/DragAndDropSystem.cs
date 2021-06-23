@@ -5,36 +5,30 @@ using UnityEngine;
 public class DragAndDropSystem : MonoBehaviour
 {
     private GameObject getTarget;
-    private bool isDragged;
-    private Item typeOf;
-    [SerializeField] private float scrollSpeed;
-    
-    bool canBeAttached;
-    Transform attachmentTransform;
-    Color originalColor;
-    HookChecker hookChecker;
+    private Transform attachmentTransform;
+    private HookChecker hookChecker;
+    private Item typeOfItem;
+    private Color originalColor;
 
-    private delegate void DadDelegate(RaycastHit hit);
-    private DadDelegate dadDelegate;
+    private bool isDragged;
+    private bool canBeAttached;
+
+    private delegate void DraggedDelegate(RaycastHit hit);
+    private DraggedDelegate draggedDelegate;
+    private delegate void EndDragDelegate();
+    private EndDragDelegate endDragDelegate;
 
     void LateUpdate()
     {
         if (Input.GetMouseButtonDown(0))
-        {
             BeginDrag();
-        }
 
         if (isDragged)
-        {
             Dragged();
-        }
 
         if (Input.GetMouseButtonUp(0))
-        {
             EndDragg();
-        }
     }
-
     void BeginDrag()
     {
         getTarget = ReturnClickedObject(out RaycastHit hit);
@@ -46,11 +40,10 @@ public class DragAndDropSystem : MonoBehaviour
             originalColor = getTarget.GetComponent<Renderer>().material.color;
             getTarget.GetComponent<Rigidbody>().isKinematic = true;
             getTarget.GetComponent<Rigidbody>().freezeRotation = true;
-            typeOf = getTarget.GetComponent<Item>();
-            SwitchSelector();
+            typeOfItem = getTarget.GetComponent<Item>();
+            ItemSelector();
         }
     }
-
     void Dragged()
     {
         Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.25f);
@@ -59,11 +52,8 @@ public class DragAndDropSystem : MonoBehaviour
         getTarget.transform.LookAt(Camera.main.transform.position);
 
         if (Physics.Raycast(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back), out RaycastHit hit))
-        {
-            dadDelegate?.Invoke(hit);
-        }
+            draggedDelegate?.Invoke(hit);
     }
-
     void EndDragg()
     {
         isDragged = false;
@@ -73,33 +63,9 @@ public class DragAndDropSystem : MonoBehaviour
             getTarget.GetComponent<Rigidbody>().freezeRotation = false;
             getTarget.GetComponent<Renderer>().material.color = originalColor;
 
-            switch (typeOf._item)
-            {
-                case Item.TypeOfItem.Product:
-                    if (canBeAttached && hookChecker.transform.childCount == 0)
-                    {
-                        getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
-                        getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
-                        getTarget.transform.parent = hookChecker.transform;
-                    }
-                    else
-                        getTarget.GetComponent<Rigidbody>().isKinematic = false;
-                    break;
-                case Item.TypeOfItem.Money:
-                    if (canBeAttached)
-                    {
-                        //sumar cantidad a la caja
-                        Destroy(getTarget);
-                    }
-                    else
-                        getTarget.GetComponent<Rigidbody>().isKinematic = false;
-                    break;
-                default:
-                    break;
-            }
+            endDragDelegate?.Invoke();
         }
     }
-
     GameObject ReturnClickedObject(out RaycastHit hit)
     {
         GameObject target = null;
@@ -113,16 +79,17 @@ public class DragAndDropSystem : MonoBehaviour
         }
         return target;
     }
-
-    void SwitchSelector()
+    void ItemSelector()
     {
-        switch (typeOf._item)
+        switch (typeOfItem._item)
         {
             case Item.TypeOfItem.Product:
-                dadDelegate = CaseProduct;
+                draggedDelegate = CaseProductDragged;
+                endDragDelegate = CaseProductEndDrag;
                 break;
             case Item.TypeOfItem.Money:
-                dadDelegate = CaseMoney;
+                draggedDelegate = CaseMoneyDragged;
+                endDragDelegate = CaseMoneyEndDrag;
                 break;
             default:
                 break;
@@ -132,8 +99,7 @@ public class DragAndDropSystem : MonoBehaviour
         //    //funcion CompleteSale de la clase Customer.
         //}
     }
-
-    void CaseProduct(RaycastHit hit)
+    void CaseProductDragged(RaycastHit hit)
     {
         if (hit.collider.CompareTag("Attachment"))
         {
@@ -155,7 +121,7 @@ public class DragAndDropSystem : MonoBehaviour
             Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
         }
     }
-    void CaseMoney(RaycastHit hit)
+    void CaseMoneyDragged(RaycastHit hit)
     {
         if (hit.collider.CompareTag("CashBox"))
         {
@@ -172,5 +138,27 @@ public class DragAndDropSystem : MonoBehaviour
 
             Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.red);
         }
+    }
+
+    void CaseProductEndDrag()
+    {
+        if (canBeAttached && hookChecker.transform.childCount == 0)
+        {
+            getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
+            getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
+            getTarget.transform.parent = hookChecker.transform;
+        }
+        else
+            getTarget.GetComponent<Rigidbody>().isKinematic = false;
+    }
+    void CaseMoneyEndDrag()
+    {
+        if (canBeAttached)
+        {
+            //sumar cantidad a la caja
+            Destroy(getTarget);
+        }
+        else
+            getTarget.GetComponent<Rigidbody>().isKinematic = false;
     }
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7644034051233314623}
   m_Layer: 0
   m_Name: Important guy
-  m_TagString: Untagged
+  m_TagString: Customer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,3 +135,5 @@ MonoBehaviour:
   CT: 1
   dialogue: {fileID: 11400000, guid: 0a608a5548a681949acf4aa50dc11b5e, type: 2}
   leaveTime: 120
+  itemBuy: {fileID: 0}
+  itemSell: {fileID: 0}

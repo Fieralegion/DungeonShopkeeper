@@ -72,9 +72,19 @@ public class DragAndDropSystem : MonoBehaviour
         GameObject target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
-        {
+        {   
             if (hit.collider.CompareTag("Draggable"))
+            {
                 target = hit.collider.gameObject;
+                /* save PreviousItem in HookChecker History */
+                if (target.transform.parent != null)
+                {
+                    hookChecker = hit.transform.parent.GetComponent<HookChecker>();
+                    hookChecker.previousItem = hit.collider.gameObject;
+                    hookChecker = null;
+                }
+                /* End */
+            }
             else 
                 target = null;
         }
@@ -154,6 +164,11 @@ public class DragAndDropSystem : MonoBehaviour
             getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
             getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
             getTarget.transform.parent = hookChecker.transform;
+            
+            /* save ActualItem in HookChecker History */
+            hookChecker.actualItem = getTarget;
+            /* End */
+
         }
         else if (canBeSold)
         {

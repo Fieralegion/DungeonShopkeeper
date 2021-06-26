@@ -125,5 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7011f73a17474b543a52cdd46126ef51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 0
+  itemName: spere
+  price: 150
   _item: 0

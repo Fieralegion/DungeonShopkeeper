@@ -13,10 +13,14 @@ public class DialogueHandler : MonoBehaviour
     Image[] opImage;
     Text ctText; 
     Text[] opTextt;
+    DialogueNodes[] nodes;
+    bool canChoose;
     // Start is called before the first frame update
     // make it world dialogue
     void Start()
     {
+        nodes = new DialogueNodes[3];
+
         ctImage = custText.transform.parent.GetComponent<Image>();
         opImage = new Image[3];
         opImage[0] = option1.transform.parent.GetComponent<Image>();
@@ -28,6 +32,33 @@ public class DialogueHandler : MonoBehaviour
         opTextt[0] = option1.GetComponent<Text>();
         opTextt[1] = option2.GetComponent<Text>();
         opTextt[2] = option3.GetComponent<Text>();
+    }
+
+    private void LateUpdate()
+    {
+        if (canChoose)
+        {
+            if (Input.GetButtonDown("Option1") && nodes[0])
+            {
+                TraverseDialogueTree(nodes[0].nextNode[0]);
+                nodes[0].activated = true;
+                canChoose = false;
+            }
+            else if (Input.GetButtonDown("Option2") && nodes[1])
+            {
+
+                TraverseDialogueTree(nodes[1].nextNode[0]);
+                nodes[1].activated = true;
+                canChoose = false;
+            }
+            else if (Input.GetButtonDown("Option3") && nodes[2])
+            {
+
+                TraverseDialogueTree(nodes[2].nextNode[0]);
+                nodes[2].activated = true;
+                canChoose = false;
+            }
+        }
     }
 
     public void TraverseDialogueTree(DialogueNodes dn)
@@ -43,8 +74,10 @@ public class DialogueHandler : MonoBehaviour
                 SummonText(dn.nextNode[i].text, opImage[i], opTextt[i], false);
                 //Debug.Log(dn.nextNode[i].name + " : " + dn.nextNode[i].nextNode[0].name);
                 int j = i;
+                nodes[j] = dn.nextNode[j];/*
                 opImage[i].transform.GetComponent<Button>().onClick.AddListener(() => TraverseDialogueTree(dn.nextNode[j].nextNode[0]));
-                opImage[i].transform.GetComponent<Button>().onClick.AddListener(() => dn.nextNode[j].activated = true);
+                opImage[i].transform.GetComponent<Button>().onClick.AddListener(() => dn.nextNode[j].activated = true);*/
+                canChoose = true;
                 failed = false;
             }
         }
@@ -90,13 +123,14 @@ public class DialogueHandler : MonoBehaviour
         StartCoroutine(AutoFade(ctImage, ctText));
     }*/
 
-    public void SummonText(string s, GameObject item)
+    public float SummonText(string s, GameObject item)
     {
         //text.text = s;
         ctText.text = TextAdjuster(s, item.name);
         ctImage.color = Color.white;
         ctText.color = Color.black;
         StartCoroutine(AutoFade(ctImage, ctText));
+        return textboxLife;
     }
 
     string TextAdjuster(string s, string name)

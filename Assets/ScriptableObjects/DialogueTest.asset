@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: DialogueTest
   m_EditorClassIdentifier: 
   greetingsD:
-  - gimme the xxx
-  - I want xxx!
-  - provide me with xxx!
-  - XXX!!!!
-  goodbyeD: []
-  thankyouD: []
-  fuD: []
-  interactionN: 0
+  - Greetings!
+  - Hello!
+  - What's up?
+  buy:
+  - I want to buy xxx
+  - Give me xxx!
+  sell:
+  - I would like to sell xxx
+  - Here have xxx!
+  happy:
+  - Thank you!
+  - This is great!
+  angry:
+  - F*ck you!
+  - You are bad
   firstNode: {fileID: 0}

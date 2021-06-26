@@ -7,6 +7,7 @@ public class ItemList : ScriptableObject
 {
     //Como chequeas los objetos colgando
     public GameObject[] itemStorage;
+    public float money;
 
     public void AddItem(GameObject i)
     {

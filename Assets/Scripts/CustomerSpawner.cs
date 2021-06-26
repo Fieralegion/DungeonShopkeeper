@@ -67,7 +67,7 @@ public class CustomerSpawner : MonoBehaviour
         }
         if (customerList.Count == 0)
         {
-            go.GetComponent<Customer>().SetActive();
+            //go.GetComponent<Customer>().SetActive();
         }
         customerList.Add(go);
         if (customerList.Count < maxCustomers)
@@ -124,7 +124,7 @@ public class CustomerSpawner : MonoBehaviour
             }
             if (customerList.Count != 0)
             {
-                customerList[0].GetComponent<Customer>().SetActive();
+                //customerList[0].GetComponent<Customer>().SetActive();
             }
             Destroy(other.gameObject);
         }

@@ -19,9 +19,14 @@ public class Customer : MonoBehaviour
     Vector3 finalDestination;
     NavMeshAgent agent;
 
+
+    Animator animator;
+
     private void OnEnable()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
+
         textHandler = GameObject.FindGameObjectWithTag("DialogueHandler").GetComponent<DialogueHandler>();
         if (CT != custType.Hardcore)
         {

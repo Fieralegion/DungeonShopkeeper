@@ -194,8 +194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7011f73a17474b543a52cdd46126ef51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: Money_Bag
   price: 0
   _item: 3
+  owner: 
+  active: 0
 --- !u!65 &359593932306976971
 BoxCollider:
   m_ObjectHideFlags: 0

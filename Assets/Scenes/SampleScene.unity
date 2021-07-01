@@ -3456,6 +3456,7 @@ GameObject:
   - component: {fileID: 922936582}
   - component: {fileID: 922936581}
   - component: {fileID: 922936580}
+  - component: {fileID: 922936584}
   m_Layer: 0
   m_Name: CashBox
   m_TagString: CashBox
@@ -3540,6 +3541,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: -26.2, z: 0}
+--- !u!114 &922936584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 922936579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 078ee344445602040baead3d1d7871bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 11400000, guid: b9f8f5f6478783e45b7c66c023282d23, type: 2}
+  money: {fileID: 359593932306976980, guid: 03d9a82b64ffb16489f39ee877495659, type: 3}
+  invBook: {fileID: 0}
 --- !u!1 &957619939
 GameObject:
   m_ObjectHideFlags: 0

@@ -72,9 +72,23 @@ public class DragAndDropSystem : MonoBehaviour
         GameObject target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
-        {
+        {   
             if (hit.collider.CompareTag("Draggable"))
+            {
                 target = hit.collider.gameObject;
+                /* save PreviousItem in HookChecker History */
+                if (target.transform.parent != null)
+                {
+                    hookChecker = hit.transform.parent.GetComponent<HookChecker>();
+                    hookChecker.previousItem = hit.collider.gameObject;
+                    hookChecker = null;
+                }
+                /* End */
+            }
+            else if (hit.collider.CompareTag("CashBox"))
+            {
+                target = hit.collider.gameObject.GetComponent<MoneySystem>().SpawnMoney();
+            }
             else 
                 target = null;
         }
@@ -138,6 +152,13 @@ public class DragAndDropSystem : MonoBehaviour
 
             Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
         }
+        else if (hit.collider.CompareTag("Customer"))
+        {
+            getTarget.GetComponent<Renderer>().material.color = Color.green;
+            canBeSold = true;
+            customerTransform = hit.transform;
+            Debug.DrawRay(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back) * hit.distance, Color.green);
+        }
         else
         {
             getTarget.GetComponent<Renderer>().material.color = Color.red;
@@ -154,20 +175,35 @@ public class DragAndDropSystem : MonoBehaviour
             getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
             getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
             getTarget.transform.parent = hookChecker.transform;
+            hookChecker.actualItem = getTarget;
         }
         else if (canBeSold)
         {
-            customerTransform.GetComponent<Customer>().CompleteSale(getTarget);
+            if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
+            {
+                canBeSold = false;
+            }
+            else
+            {
+                getTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
         }
         else
             getTarget.GetComponent<Rigidbody>().isKinematic = false;
     }
     void CaseMoneyEndDrag()
     {
-        if (canBeAttached)
+        if (canBeAttached && getTarget.GetComponent<Item>().active)
         {
-            //sumar cantidad a la caja
+            GameObject.FindGameObjectWithTag("CashBox").GetComponent<MoneySystem>().ModifyMoney(getTarget.GetComponent<Item>().price);
             Destroy(getTarget);
+        }
+        else if (canBeSold)
+        {
+            if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
+            {
+                getTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
         }
         else
             getTarget.GetComponent<Rigidbody>().isKinematic = false;

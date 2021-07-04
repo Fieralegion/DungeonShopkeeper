@@ -33,7 +33,7 @@ public class CustomerSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     IEnumerator TimedSpawn()
@@ -67,7 +67,7 @@ public class CustomerSpawner : MonoBehaviour
         }
         if (customerList.Count == 0)
         {
-            go.GetComponent<Customer>().SetActive();
+            //go.GetComponent<Customer>().SetActive();
         }
         customerList.Add(go);
         if (customerList.Count < maxCustomers)
@@ -106,25 +106,20 @@ public class CustomerSpawner : MonoBehaviour
         }
     }
 
-    public void CompleteFirstCustom()
-    {
-        customerList[0].GetComponent<Customer>().sale = true;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Customer>().sale)
+        if (other.GetComponent<Customer>().IsActive())
         {
             customerList.Remove(other.gameObject);
             float mult = 0;
-            foreach(GameObject g in customerList)
+            foreach (GameObject g in customerList)
             {
                 g.GetComponent<Customer>().SetDestination(stopPoint.transform.position + mult * Vector3.left * 2);
                 mult++;
             }
             if (customerList.Count != 0)
             {
-                customerList[0].GetComponent<Customer>().SetActive();
+                //customerList[0].GetComponent<Customer>().SetActive();
             }
             Destroy(other.gameObject);
         }

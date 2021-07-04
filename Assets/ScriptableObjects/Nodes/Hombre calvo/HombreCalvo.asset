@@ -10,22 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b8b2bfd991720842bed9ef28091f1f1, type: 3}
-  m_Name: DialogueTest
+  m_Name: HombreCalvo
   m_EditorClassIdentifier: 
-  greetingsD:
-  - Greetings!
-  - Hello!
-  - What's up?
-  buy:
-  - I want to buy xxx
-  - Give me xxx!
-  sell:
-  - I would like to sell xxx
-  - Here have xxx!
-  happy:
-  - Thank you!
-  - This is great!
-  angry:
-  - F*ck you!
-  - You are bad
-  firstNode: {fileID: 0}
+  greetingsD: []
+  buy: []
+  sell: []
+  happy: []
+  angry: []
+  firstNode: {fileID: 11400000, guid: c6ff2063d3ef4154cb2b52b04477e685, type: 2}

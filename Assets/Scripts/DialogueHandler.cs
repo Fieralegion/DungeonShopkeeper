@@ -111,10 +111,11 @@ public class DialogueHandler : MonoBehaviour
             if (failed)
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
-                if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
+                GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
+                /*if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
                 {
                     Time.timeScale = 1;
-                }
+                }*/
             }
 
         }
@@ -156,10 +157,11 @@ public class DialogueHandler : MonoBehaviour
             if (failed)
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
-                if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
+                GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
+                /*if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
                 {
-                    Time.timeScale = 1;
-                }
+                    
+                }*/
             }
         }
     }

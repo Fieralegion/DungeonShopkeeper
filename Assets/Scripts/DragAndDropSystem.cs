@@ -98,6 +98,7 @@ public class DragAndDropSystem : MonoBehaviour
             else if (hit.collider.CompareTag("CashBox"))
             {
                 target = hit.collider.gameObject.GetComponent<MoneySystem>().SpawnMoney();
+                target.GetComponent<Item>().active = true;
             }
             else 
                 target = null;
@@ -171,6 +172,7 @@ public class DragAndDropSystem : MonoBehaviour
         }
         else
         {
+            Debug.Log("Nothing");
             getTarget.GetComponent<Renderer>().material.color = Color.red;
             canBeAttached = false;
 
@@ -189,6 +191,7 @@ public class DragAndDropSystem : MonoBehaviour
         }
         else if (canBeSold)
         {
+            Debug.Log("sell");
             if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
             {
                 canBeSold = false;
@@ -211,6 +214,10 @@ public class DragAndDropSystem : MonoBehaviour
         else if (canBeSold)
         {
             if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
+            {
+                getTarget.GetComponent<Rigidbody>().isKinematic = false;
+            }
+            else
             {
                 getTarget.GetComponent<Rigidbody>().isKinematic = false;
             }

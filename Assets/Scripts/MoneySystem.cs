@@ -5,17 +5,14 @@ using UnityEngine;
 public class MoneySystem : MonoBehaviour
 {
     [SerializeField] ItemList inventory;
-    [SerializeField] GameObject money, invBook;
+    [SerializeField] GameObject money;
 
     float maxBags = 2, currentBags = 0;
 
     public void ModifyMoney(float quantity)
     {
         inventory.money += quantity;
-        if (quantity >= 0)
-        {
-            currentBags = Mathf.Max(0, currentBags - 1);
-        }
+        currentBags = Mathf.Max(0, currentBags - 1);
         GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryBook>().UpdateMoney();
     }
 

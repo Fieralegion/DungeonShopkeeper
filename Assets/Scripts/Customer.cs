@@ -17,13 +17,14 @@ public class Customer : MonoBehaviour
     [SerializeField] bool buy, sell;
     protected bool active;
     bool wrong;
-    public Vector3 finalDestination;
+    public Vector3 finalDestination, bandeja;
     NavMeshAgent agent;
 
     GameObject payment;
 
     private void OnEnable()
     {
+        bandeja = GameObject.FindGameObjectWithTag("Bandeja").transform.position + new Vector3(0, 0.5f);
         agent = GetComponent<NavMeshAgent>();
         textHandler = GameObject.FindGameObjectWithTag("DialogueHandler").GetComponent<DialogueHandler>();
         if (CT != custType.Hardcore)
@@ -108,7 +109,11 @@ public class Customer : MonoBehaviour
 
             if (sell && item.GetComponent<Item>()._item == itemType.Money) //chequear la cantidad de dinero restante. Chequear si es un objeto de dinero
             {
-
+                if (buy)
+                {
+                    payment = Instantiate(itemSell, bandeja, transform.rotation);
+                    payment.GetComponent<Item>().owner = "Customer";
+                }
                 if (item.GetComponent<Item>().price == 0)
                 {
                     GameObject cash = GameObject.FindGameObjectWithTag("CashBox");
@@ -162,6 +167,7 @@ public class Customer : MonoBehaviour
                 textHandler.SummonText(dialogue.RandomDialogue(textType.DepartAngry), itemBuy);
             }
             SetDestination(finalDestination);
+            GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(gameObject);
         }
         else
         {
@@ -198,11 +204,13 @@ public class Customer : MonoBehaviour
     {
         yield return new WaitForSeconds(leaveTime);
         active = true;
-        SetDestination(finalDestination);
+        if (payment) { Destroy(payment); }
+        FinishTransaction(false);
     }
 
     IEnumerator StartBusiness()
     {
+        Debug.Log("Starttalking");
         yield return new WaitForSeconds(textHandler.SummonText(dialogue.RandomDialogue(textType.Greeting), itemBuy));
         if (buy)
         {
@@ -218,21 +226,21 @@ public class Customer : MonoBehaviour
     {
         if (other.tag == "Shop")
         {
-            active = true;
             if (buy)
             {
-                payment = Instantiate(money, transform.position + Vector3.right * 2, transform.rotation);
+                payment = Instantiate(money, bandeja, transform.rotation);
                 payment.GetComponent<Item>().price = itemBuy.GetComponent<Item>().price;
                 payment.GetComponent<Item>().owner = "Customer";
             }
             else
             {
-                payment = Instantiate(itemSell, transform.position + Vector3.right * 2, transform.rotation);
+                payment = Instantiate(itemSell, bandeja, transform.rotation);
                 payment.GetComponent<Item>().owner = "Customer";
             }
 
             if (CT == custType.Casual)
             {
+                active = true;
                 StartCoroutine(StartBusiness());
             }
             else

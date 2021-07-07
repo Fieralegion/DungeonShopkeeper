@@ -110,18 +110,18 @@ public class CustomerSpawner : MonoBehaviour
     {
         if (other.GetComponent<Customer>().IsActive())
         {
-            customerList.Remove(other.gameObject);
-            float mult = 0;
-            foreach (GameObject g in customerList)
-            {
-                g.GetComponent<Customer>().SetDestination(stopPoint.transform.position + mult * Vector3.left * 2);
-                mult++;
-            }
-            if (customerList.Count != 0)
-            {
-                //customerList[0].GetComponent<Customer>().SetActive();
-            }
             Destroy(other.gameObject);
+        }
+    }
+
+    public void MoveCustomer(GameObject cust)
+    {
+        customerList.Remove(cust);
+        float mult = 0;
+        foreach (GameObject g in customerList)
+        {
+            g.GetComponent<Customer>().SetDestination(stopPoint.transform.position + mult * Vector3.left * 2);
+            mult++;
         }
     }
 }

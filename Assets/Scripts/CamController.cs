@@ -31,13 +31,16 @@ public class CamController : MonoBehaviour
 
     void FPSCamMovement()
     {
-        float mouseX = Input.GetAxis("Mouse X") * FPSRotationSpeed;
-        float mouseY = Input.GetAxis("Mouse Y") * FPSRotationSpeed;
+        if (Time.timeScale == 1)
+        {
+            float mouseX = Input.GetAxis("Mouse X") * FPSRotationSpeed;
+            float mouseY = Input.GetAxis("Mouse Y") * FPSRotationSpeed;
 
-        yRotation -= mouseY;
-        xRotation += mouseX;
-        yRotation = Mathf.Clamp(yRotation, -80, 80);
+            yRotation -= mouseY;
+            xRotation += mouseX;
+            yRotation = Mathf.Clamp(yRotation, -80, 80);
 
-        transform.localEulerAngles= new Vector3(yRotation, xRotation, 0);
+            transform.localEulerAngles = new Vector3(yRotation, xRotation, 0);
+        }
     }
 }

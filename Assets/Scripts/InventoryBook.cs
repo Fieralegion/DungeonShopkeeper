@@ -9,6 +9,7 @@ public class InventoryBook : MonoBehaviour
     [SerializeField] GameObject nameList1, nameList2, quantList1, quantList2, money;
     RectTransform obj;
     Vector3 basePos, finalPos;
+    public bool menuActive;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,7 @@ public class InventoryBook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Inv"))
+        if (Input.GetButton("Inv") || menuActive)
         {
             if (obj.localPosition.y < finalPos.y)
             {

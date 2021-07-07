@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HookChecker : MonoBehaviour
 {
-    public GameObject actualItem;
-    public GameObject previousItem;
+    public string actualItem;
+    public string previousItem;
     public bool front;
 }

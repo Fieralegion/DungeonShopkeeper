@@ -58,7 +58,7 @@ public class DialogueHandler : MonoBehaviour
 
     public void OptionPicker(int ind)
     {
-        TraverseDialogueTree(nodes[ind].nextNode[0]); //Check the possible conditions of this branch. Post condition
+        TraverseDialogueTree(nodes[ind].nextNode[0]); 
         nodes[ind].activated = true;
         canChoose = false;
     }
@@ -136,7 +136,6 @@ public class DialogueHandler : MonoBehaviour
             bool failed = true;
             foreach (DialogueNodes n in dn.nextNode)
             {
-                Debug.Log(n.name + " is on");
                 if (CheckConditional(n))
                 {
                     OptionPicker(n);
@@ -179,7 +178,7 @@ public class DialogueHandler : MonoBehaviour
             case conditionals.Item: //Check if item is in storage or store
                 foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
                 {
-                    if (h.GetComponent<HookChecker>().actualItem && h.GetComponent<HookChecker>().actualItem.GetComponent<Item>().itemName == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
                     {
                         return true;
                     }
@@ -188,7 +187,7 @@ public class DialogueHandler : MonoBehaviour
             case conditionals.ItemInFront: //Check if item is in front
                 foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
                 {
-                    if (h.GetComponent<HookChecker>().front && h.GetComponent<HookChecker>().actualItem  && h.GetComponent<HookChecker>().actualItem.GetComponent<Item>().itemName == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    if (h.GetComponent<HookChecker>().front&& h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
                     {
                         return true;
                     }

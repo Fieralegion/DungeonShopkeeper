@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Flags", menuName = "ScriptableObjects/Flags", order = 4)]
-public class Flags : MonoBehaviour
+public class Flags : ScriptableObject
 {
     [SerializeField] string[] tagNames;
     public Dictionary<string, bool> tagList;

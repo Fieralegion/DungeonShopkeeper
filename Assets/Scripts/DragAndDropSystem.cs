@@ -72,7 +72,16 @@ public class DragAndDropSystem : MonoBehaviour
         GameObject target = null;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray.origin, ray.direction * 10, out hit))
-        {   
+        {
+            if (hit.collider.CompareTag("Attachment"))
+            {
+                GameObject.FindGameObjectWithTag("Restock").GetComponent<RestockManager>().ActivateRestock(hit.collider.gameObject);
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("Restock").GetComponent<RestockManager>().DeactivateRestock();
+            }
+
             if (hit.collider.CompareTag("Draggable"))
             {
                 target = hit.collider.gameObject;
@@ -80,7 +89,8 @@ public class DragAndDropSystem : MonoBehaviour
                 if (target.transform.parent != null)
                 {
                     hookChecker = hit.transform.parent.GetComponent<HookChecker>();
-                    hookChecker.previousItem = hit.collider.gameObject;
+                    hookChecker.previousItem = hit.collider.gameObject.GetComponent<Item>().itemName;
+                    hookChecker.actualItem = "";
                     hookChecker = null;
                 }
                 /* End */
@@ -175,7 +185,7 @@ public class DragAndDropSystem : MonoBehaviour
             getTarget.transform.SetPositionAndRotation(attachmentTransform.position, attachmentTransform.rotation);
             getTarget.transform.position += attachmentTransform.forward.normalized * (getTarget.GetComponent<MeshFilter>().mesh.bounds.size.z / 2) * getTarget.transform.localScale.z;
             getTarget.transform.parent = hookChecker.transform;
-            hookChecker.actualItem = getTarget;
+            hookChecker.actualItem = getTarget.GetComponent<Item>().itemName;
         }
         else if (canBeSold)
         {

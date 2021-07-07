@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemStorage:
   - {fileID: 2635640204630638233, guid: d339af8ee7b42674e8d6d3fe9aa1a2a0, type: 3}
-  - {fileID: 2425400139774039503, guid: 2a7b59f182efa8b44a1128e318c4e413, type: 3}
   - {fileID: 3444471266261511945, guid: 04e936e635f9e3f4ca5da6b81244a0a8, type: 3}
-  money: 1250
+  - {fileID: 3444471266261511945, guid: 04e936e635f9e3f4ca5da6b81244a0a8, type: 3}
+  - {fileID: 2425400139774039503, guid: 2a7b59f182efa8b44a1128e318c4e413, type: 3}
+  money: 1300

@@ -47,13 +47,20 @@ public class DragAndDropSystem : MonoBehaviour
     }
     void Dragged()
     {
-        Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.25f);
-        Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace);
-        getTarget.transform.position = currentPosition;
-        getTarget.transform.LookAt(Camera.main.transform.position);
+        if (getTarget)
+        {
+            Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.25f);
+            Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace);
+            getTarget.transform.position = currentPosition;
+            getTarget.transform.LookAt(Camera.main.transform.position);
 
-        if (Physics.Raycast(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back), out RaycastHit hit))
-            draggedDelegate?.Invoke(hit);
+            if (Physics.Raycast(getTarget.transform.position, getTarget.transform.TransformDirection(Vector3.back), out RaycastHit hit))
+                draggedDelegate?.Invoke(hit);
+        }
+        else
+        {
+            EndDragg();
+        }
     }
     void EndDragg()
     {
@@ -191,8 +198,7 @@ public class DragAndDropSystem : MonoBehaviour
         }
         else if (canBeSold)
         {
-            Debug.Log("sell");
-            if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
+            if (customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
             {
                 canBeSold = false;
             }
@@ -213,7 +219,7 @@ public class DragAndDropSystem : MonoBehaviour
         }
         else if (canBeSold)
         {
-            if (!customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
+            if (customerTransform.GetComponent<Customer>().CompleteSale(getTarget))
             {
                 getTarget.GetComponent<Rigidbody>().isKinematic = false;
             }

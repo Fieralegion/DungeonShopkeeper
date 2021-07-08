@@ -80,6 +80,7 @@ public class DialogueHandler : MonoBehaviour
     public void TraverseDialogueTree(DialogueNodes dn)
     {
         DeleteText();
+        StopAllCoroutines();
         SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
         if (dn.r != resutls.None)
         {
@@ -126,6 +127,7 @@ public class DialogueHandler : MonoBehaviour
         curCust = go;
         DialogueNodes dn = go.GetComponent<Customer>().dialogue.firstNode;
         DeleteText();
+        StopAllCoroutines();
         SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
         if (dn.r != resutls.None)
         {
@@ -164,11 +166,6 @@ public class DialogueHandler : MonoBehaviour
                 }*/
             }
         }
-    }
-
-    bool OptionUnlock()
-    {
-        return true;
     }
 
     bool CheckConditional(DialogueNodes node)
@@ -251,7 +248,7 @@ public class DialogueHandler : MonoBehaviour
         {
             compact[i + n] = temp[i];
             wpl++;
-            if (wpl == maxLength)
+            if (wpl >= maxLength && compact[i + n] == ' ')
             {
                 wpl = 0;
                 compact[i + n + 1] = '\n';

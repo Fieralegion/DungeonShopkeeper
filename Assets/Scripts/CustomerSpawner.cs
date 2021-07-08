@@ -10,7 +10,7 @@ public class CustomerSpawner : MonoBehaviour
     [SerializeField] GameObject spawner1, spawner2, stopPoint;
     [SerializeField] GameObject[] customers;
     [SerializeField] CustomerList[] importantCustomers;
-    [SerializeField] GameObject[] purchaseAvailable;
+    [SerializeField] ItemList purchaseAvailable;
 
     [System.Serializable]
     public struct CustomerList
@@ -54,20 +54,27 @@ public class CustomerSpawner : MonoBehaviour
         go.GetComponent<Customer>().SetFinalDestination(RandomPoint());
         if (go.GetComponent<Customer>().CT == Customer.custType.Casual)
         {
-            if (Random.Range(0, 100) <= 65)
+            List<GameObject> front = new List<GameObject>();
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Attachment"))
             {
-                go.GetComponent<Customer>().itemBuy = purchaseAvailable[0]; //Temp. debe ser Item del mostrador. Hay que cambiar
-                go.GetComponent<Customer>().itemSell = purchaseAvailable[Random.Range(0, purchaseAvailable.Length)];
+                if (g.GetComponent<HookChecker>().front && g.GetComponent<HookChecker>().actualItem != "")
+                {
+                    front.Add(purchaseAvailable.SpawnItem(g.GetComponent<HookChecker>().actualItem));
+                }
+            }
+            if (Random.Range(0, 100) <= 65 && front.Count >= 1)
+            {
+                go.GetComponent<Customer>().itemBuy = purchaseAvailable.itemStorage[Random.Range(0, front.Count)];
+                
             }
             else
             {
-                go.GetComponent<Customer>().itemBuy = purchaseAvailable[Random.Range(0, purchaseAvailable.Length)];
-                go.GetComponent<Customer>().itemSell = purchaseAvailable[Random.Range(0, purchaseAvailable.Length)];
+                go.GetComponent<Customer>().itemBuy = purchaseAvailable.itemStorage[Random.Range(0, purchaseAvailable.itemStorage.Length)];
             }
-        }
-        if (customerList.Count == 0)
-        {
-            //go.GetComponent<Customer>().SetActive();
+            while (go.GetComponent<Customer>().itemSell == null || go.GetComponent<Customer>().itemSell == go.GetComponent<Customer>().itemBuy)
+            {
+                go.GetComponent<Customer>().itemSell = purchaseAvailable.itemStorage[Random.Range(0, purchaseAvailable.itemStorage.Length)];
+            }
         }
         customerList.Add(go);
         if (customerList.Count < maxCustomers)

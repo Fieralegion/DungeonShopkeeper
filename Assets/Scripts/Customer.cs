@@ -80,6 +80,8 @@ public class Customer : MonoBehaviour
                     else
                     {
                         textHandler.SummonText(dialogue.RandomDialogue(textType.Sell), itemSell);
+                        payment = Instantiate(itemSell, bandeja, transform.rotation);
+                        payment.GetComponent<Item>().owner = "Customer";
                     }
                     Destroy(item);
                     return true;
@@ -109,11 +111,6 @@ public class Customer : MonoBehaviour
 
             if (sell && item.GetComponent<Item>()._item == itemType.Money) //chequear la cantidad de dinero restante. Chequear si es un objeto de dinero
             {
-                if (buy)
-                {
-                    payment = Instantiate(itemSell, bandeja, transform.rotation);
-                    payment.GetComponent<Item>().owner = "Customer";
-                }
                 if (item.GetComponent<Item>().price == 0)
                 {
                     GameObject cash = GameObject.FindGameObjectWithTag("CashBox");
@@ -128,6 +125,7 @@ public class Customer : MonoBehaviour
                     else
                     {
                         FinishTransaction(false);
+                        Destroy(payment);
                         return false;
                     }
                 }

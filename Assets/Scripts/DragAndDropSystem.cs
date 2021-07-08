@@ -92,7 +92,6 @@ public class DragAndDropSystem : MonoBehaviour
             if (hit.collider.CompareTag("Draggable"))
             {
                 target = hit.collider.gameObject;
-                /* save PreviousItem in HookChecker History */
                 if (target.transform.parent != null)
                 {
                     hookChecker = hit.transform.parent.GetComponent<HookChecker>();
@@ -100,7 +99,6 @@ public class DragAndDropSystem : MonoBehaviour
                     hookChecker.actualItem = "";
                     hookChecker = null;
                 }
-                /* End */
             }
             else if (hit.collider.CompareTag("CashBox"))
             {
@@ -125,10 +123,6 @@ public class DragAndDropSystem : MonoBehaviour
                 endDragDelegate = CaseProductEndDrag;
                 break;
         }
-        //if (hit.collider.CompareTag("Customer"))
-        //{
-        //    //funcion CompleteSale de la clase Customer.
-        //}
     }
     void CaseProductDragged(RaycastHit hit)
     {
@@ -179,7 +173,6 @@ public class DragAndDropSystem : MonoBehaviour
         }
         else
         {
-            Debug.Log("Nothing");
             getTarget.GetComponent<Renderer>().material.color = Color.red;
             canBeAttached = false;
 

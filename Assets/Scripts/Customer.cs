@@ -50,19 +50,6 @@ public class Customer : MonoBehaviour
         }
     }
 
-    /* IEnumerator TurnAround()
-     {
-         yield return new WaitForSeconds(3f);
-         Debug.Log("Rotated");
-         transform.Rotate(Vector3.Lerp(transform.forward, Vector3.right, 0.5f));
-     }*/
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public bool CompleteSale(GameObject item)
     {
         if (active)
@@ -109,7 +96,7 @@ public class Customer : MonoBehaviour
                 }
             }
 
-            if (sell && item.GetComponent<Item>()._item == itemType.Money) //chequear la cantidad de dinero restante. Chequear si es un objeto de dinero
+            if (sell && item.GetComponent<Item>()._item == itemType.Money)
             {
                 if (item.GetComponent<Item>().price == 0)
                 {
@@ -244,10 +231,6 @@ public class Customer : MonoBehaviour
             else
             {
                 textHandler.TraverseDialogueTree(gameObject);
-                if (CT == custType.Hardcore)
-                {
-                    //Time.timeScale = 0;
-                }
             }
         }
     }

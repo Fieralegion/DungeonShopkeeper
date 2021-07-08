@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemList", menuName = "ScriptableObjects/ItemList", order = 5)]
 public class ItemList : ScriptableObject
 {
-    //Como chequeas los objetos colgando
     public GameObject[] itemStorage;
     public float money;
 

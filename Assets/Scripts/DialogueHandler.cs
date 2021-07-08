@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using EnumLib;
-//arreglar opciones de juego
 public class DialogueHandler : MonoBehaviour
 {
     [SerializeField] float textboxLife, fadeSpeed;
@@ -18,8 +17,7 @@ public class DialogueHandler : MonoBehaviour
     DialogueNodes[] nodes;
     bool canChoose;
     GameObject curCust;
-    // Start is called before the first frame update
-    // make it world dialogue
+
     void Start()
     {
         nodes = new DialogueNodes[3];
@@ -65,14 +63,7 @@ public class DialogueHandler : MonoBehaviour
 
     public void OptionPicker(DialogueNodes dn)
     {
-        //if (dn.r != resutls.None)
-        //{
-        //    ExecuteResult(dn);
-        // }
-        // else
-        // {
         TraverseDialogueTree(dn.nextNode[0]);
-        //}
         dn.activated = true;
         canChoose = false;
     }
@@ -113,10 +104,6 @@ public class DialogueHandler : MonoBehaviour
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
-                /*if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
-                {
-                    Time.timeScale = 1;
-                }*/
             }
 
         }
@@ -160,10 +147,6 @@ public class DialogueHandler : MonoBehaviour
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
-                /*if (curCust.GetComponent<Customer>().CT == Customer.custType.Hardcore)
-                {
-                    
-                }*/
             }
         }
     }
@@ -174,7 +157,7 @@ public class DialogueHandler : MonoBehaviour
         {
             case conditionals.None:
                 return false;
-            case conditionals.Item: //Check if item is in storage or store
+            case conditionals.Item:
                 foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
                 {
                     if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
@@ -183,7 +166,7 @@ public class DialogueHandler : MonoBehaviour
                     }
                 }
                 return inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
-            case conditionals.ItemInFront: //Check if item is in front
+            case conditionals.ItemInFront:
                 foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
                 {
                     if (h.GetComponent<HookChecker>().front&& h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
@@ -192,7 +175,7 @@ public class DialogueHandler : MonoBehaviour
                     }
                 }
                 return false;
-            case conditionals.Money: //Check if character has enough money
+            case conditionals.Money:
                 return node.value <= inventory.money;
             case conditionals.Flag:
                 return activeFlags.CheckTag(node.flag);
@@ -219,7 +202,6 @@ public class DialogueHandler : MonoBehaviour
 
     public void SummonText(string s, Image bubble, Text text, bool tb)
     {
-        //text.text = s;
         text.text = TextAdjuster(s, " ");
         bubble.color = Color.white;
         text.color = Color.black;
@@ -231,7 +213,6 @@ public class DialogueHandler : MonoBehaviour
 
     public float SummonText(string s, GameObject item)
     {
-        //text.text = s;
         ctText.text = TextAdjuster(s, item.name);
         ctImage.color = Color.white;
         ctText.color = Color.black;

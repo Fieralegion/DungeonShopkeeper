@@ -22,20 +22,13 @@ public class CustomerSpawner : MonoBehaviour
     List<GameObject> customerList;
     GlobalTimer gt;
     int impIndex = 0;
-    // Start is called before the first frame update
+
     void Start()
     {
         customerList = new List<GameObject>();
         gt = GameObject.FindGameObjectWithTag("GlobalTimer").GetComponent<GlobalTimer>();
         StartCoroutine(TimedSpawn());
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     IEnumerator TimedSpawn()
     {
         yield return new WaitForSeconds(Random.Range(minmaxCooldown.x, minmaxCooldown.y));

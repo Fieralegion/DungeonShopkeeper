@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9579131984c3844855d3990d0d4384, type: 3}
   m_Name: Flags
   m_EditorClassIdentifier: 
-  tagNames: []
+  tagNames:
+  - Maldito

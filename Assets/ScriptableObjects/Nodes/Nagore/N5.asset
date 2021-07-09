@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: N5
+  m_EditorClassIdentifier: 
+  text: "\xA1Que fue la carretilla, cop\xF3n! \xA1Se escuch\xF3 un gran estruendo
+    y se lanz\xF3 a por m\xED! \xA1Casi me aplasta!"
+  nextNode:
+  - {fileID: 11400000, guid: 26aed23ba7dbb844d9ba480fbe3805d2, type: 2}
+  activated: 0
+  item: {fileID: 0}
+  value: 0
+  r: 0
+  c: 0
+  flag: 

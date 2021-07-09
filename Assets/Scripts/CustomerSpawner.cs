@@ -7,6 +7,7 @@ public class CustomerSpawner : MonoBehaviour
 {
     [SerializeField] Vector2 minmaxCooldown;
     [SerializeField] int maxCustomers;
+    [SerializeField] float lineTime;
     [SerializeField] GameObject spawner1, spawner2, stopPoint;
     [SerializeField] GameObject[] customers;
     [SerializeField] CustomerList[] importantCustomers;
@@ -116,6 +117,12 @@ public class CustomerSpawner : MonoBehaviour
 
     public void MoveCustomer(GameObject cust)
     {
+        StartCoroutine(LineDelay(cust));
+    }
+
+    IEnumerator LineDelay(GameObject cust)
+    {
+        yield return new WaitForSeconds(lineTime);
         customerList.Remove(cust);
         float mult = 0;
         foreach (GameObject g in customerList)

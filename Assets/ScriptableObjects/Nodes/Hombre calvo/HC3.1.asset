@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
   m_Name: HC3.1
   m_EditorClassIdentifier: 
-  text: Disculpa. Quiero un arma grande y poderosa!
+  text: "\xA1Disculpa! Es que he encontrado una puerta de cristal al oeste y no s\xE9
+    c\xF3mo abrirla. Quiz\xE1 con algo grande, un arma que resista, pueda romperla."
   nextNode:
   - {fileID: 11400000, guid: c346eb380e48dbd49bb4ab038226764e, type: 2}
-  - {fileID: 11400000, guid: aa59e33bd72dfb04db5ac01c6567299e, type: 2}
   activated: 0
   item: {fileID: 0}
   value: 0
-  r: 1
+  r: 0
   c: 0
+  flag: 

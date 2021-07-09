@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: N9.2
+  m_EditorClassIdentifier: 
+  text: "Claro que existe, hijo. Yo tengo much\xEDsimos, y todos funcionan. Este
+    es para los c\xF3rpidos, este para las matruchas. Este de aqu\xED aleja a los
+    cobradores, y este sirve para... \xBFpara qu\xE9 sirve este? Ah no, si esto es
+    una postalita, de cuando fui de viaje al castillo de Roteri. No sabes lo bien
+    que se come all\xED, si te gusta la carne, claro. \xBFPero a qui\xE9n no le gusta?
+    Bueno, a los modernos, pero esos ni cuentan. Mi hijo se cas\xF3 con una moderna,
+    pero yo no la aguanto. \xBFT\xFA est\xE1s casado? "
+  nextNode:
+  - {fileID: 11400000, guid: 68717df4eec21fe4aa49931a91e923bd, type: 2}
+  - {fileID: 11400000, guid: 59730d0c791b2d24685e5912d3f059da, type: 2}
+  activated: 0
+  item: {fileID: 0}
+  value: 0
+  r: 0
+  c: 0
+  flag: 

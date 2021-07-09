@@ -41,14 +41,17 @@ public class DialogueHandler : MonoBehaviour
         {
             if (Input.GetButtonDown("Option1") && nodes[0])
             {
+                canChoose = false;
                 OptionPicker(0);
             }
             else if (Input.GetButtonDown("Option2") && nodes[1])
             {
+                canChoose = false;
                 OptionPicker(1);
             }
             else if (Input.GetButtonDown("Option3") && nodes[2])
             {
+                canChoose = false;
                 OptionPicker(2);
             }
         }
@@ -56,16 +59,30 @@ public class DialogueHandler : MonoBehaviour
 
     public void OptionPicker(int ind)
     {
-        TraverseDialogueTree(nodes[ind].nextNode[0]); 
+        if (nodes[ind].r == resutls.None)
+        {
+            TraverseDialogueTree(nodes[ind].nextNode[0]);
+        }
+        else
+        {
+            DeleteText();
+            ExecuteResult(nodes[ind]);
+        }
         nodes[ind].activated = true;
-        canChoose = false;
     }
 
     public void OptionPicker(DialogueNodes dn)
     {
-        TraverseDialogueTree(dn.nextNode[0]);
+        if (dn.r == resutls.None)
+        {
+            TraverseDialogueTree(dn.nextNode[0]);
+        }
+        else
+        {
+            DeleteText();
+            ExecuteResult(dn.nextNode[0]);
+        }
         dn.activated = true;
-        canChoose = false;
     }
 
     public void TraverseDialogueTree(DialogueNodes dn)
@@ -73,13 +90,13 @@ public class DialogueHandler : MonoBehaviour
         DeleteText();
         StopAllCoroutines();
         SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
-        if (dn.r != resutls.None)
+        /*if (dn.r != resutls.None)
         {
             ExecuteResult(dn);
             return;
-        }
-        else
-        {
+        }*/
+        //else
+        //{
             bool failed = true;
             foreach (DialogueNodes n in dn.nextNode)
             {
@@ -93,20 +110,26 @@ public class DialogueHandler : MonoBehaviour
             {
                 if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None)
                 {
+                    Debug.Log(dn.nextNode[i].name);
                     int j = i;
                     nodes[j] = dn.nextNode[j];
                     failed = false;
                     canChoose = true;
+                    Debug.Log(canChoose);
                     SummonText(nodes[j].text, opImage[j], opTextt[j], false);
                 }
             }
             if (failed)
             {
+                if (dn.r != resutls.None)
+                {
+                    ExecuteResult(dn);
+                }
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
             }
 
-        }
+        //}
     }
 
     public void TraverseDialogueTree(GameObject go)
@@ -116,13 +139,13 @@ public class DialogueHandler : MonoBehaviour
         DeleteText();
         StopAllCoroutines();
         SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
-        if (dn.r != resutls.None)
+        /*if (dn.r != resutls.None)
         {
             ExecuteResult(dn);
             return;
-        }
-        else
-        {
+        }*/
+        //else
+        //{
             bool failed = true;
             foreach (DialogueNodes n in dn.nextNode)
             {
@@ -145,10 +168,14 @@ public class DialogueHandler : MonoBehaviour
             }
             if (failed)
             {
+                if (dn.r != resutls.None)
+                {
+                    ExecuteResult(dn);
+                }
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
             }
-        }
+        //}
     }
 
     bool CheckConditional(DialogueNodes node)
@@ -192,10 +219,13 @@ public class DialogueHandler : MonoBehaviour
                 curCust.GetComponent<Customer>().nextDialogue = node;
                 break;
             case resutls.Item:
-                Instantiate(curCust.GetComponent<Customer>().itemSell, curCust.transform.position + Vector3.right * 2, curCust.transform.rotation);
+                Instantiate(curCust.GetComponent<Customer>().itemSell, curCust.GetComponent<Customer>().bandeja, curCust.transform.rotation);
                 break;
             case resutls.ActivateFlag:
                 activeFlags.ModifyFlag(node.flag);
+                break;
+            case resutls.DeletePayment:
+                curCust.GetComponent<Customer>().DestroyPayment();
                 break;
         }
     }

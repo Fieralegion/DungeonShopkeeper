@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
   m_Name: HC4.1
   m_EditorClassIdentifier: 
-  text: Eso es lo que quiero :)
-  nextNode: []
+  text: "\xBFY no puedes hacerlo con tu espada?"
+  nextNode:
+  - {fileID: 11400000, guid: ddfcdc42c17701747bf071b6ab76fc7f, type: 2}
   activated: 0
   item: {fileID: 0}
   value: 0
   r: 0
   c: 0
+  flag: 

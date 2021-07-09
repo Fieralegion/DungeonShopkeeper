@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
   m_Name: HC1
   m_EditorClassIdentifier: 
-  text: Quiero algo grande!!!
+  text: "\xA1Ho-hola! \xBFTienes algo grande?"
   nextNode:
   - {fileID: 11400000, guid: 84fd946490565d2489de9510ed73839c, type: 2}
   - {fileID: 11400000, guid: a3cd0fdf29273bc4891d9f855646ba47, type: 2}
@@ -22,3 +22,4 @@ MonoBehaviour:
   value: 0
   r: 0
   c: 0
+  flag: 

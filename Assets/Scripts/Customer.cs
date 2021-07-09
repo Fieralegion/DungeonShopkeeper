@@ -129,11 +129,12 @@ public class Customer : MonoBehaviour
                 FinishTransaction(false);
                 Destroy(payment);
             }
-        }
-        if (CT != custType.Casual)
-        {
-            FinishTransaction(false);
-            Destroy(payment);
+
+            if (CT == custType.Casual && sell || buy)
+            {
+                FinishTransaction(false);
+                Destroy(payment);
+            }
         }
         return false;
     }
@@ -143,6 +144,8 @@ public class Customer : MonoBehaviour
         StopAllCoroutines();
         if (CT == custType.Casual)
         {
+            buy = false;
+            sell = false;
             if (good)
             {
                 textHandler.SummonText(dialogue.RandomDialogue(textType.DepartHappy), itemBuy);
@@ -190,12 +193,11 @@ public class Customer : MonoBehaviour
         yield return new WaitForSeconds(leaveTime);
         active = true;
         if (payment) { Destroy(payment); }
-        FinishTransaction(false);
+        SetDestination(finalDestination);
     }
 
     IEnumerator StartBusiness()
     {
-        Debug.Log("Starttalking");
         yield return new WaitForSeconds(textHandler.SummonText(dialogue.RandomDialogue(textType.Greeting), itemBuy));
         if (buy)
         {
@@ -211,21 +213,9 @@ public class Customer : MonoBehaviour
     {
         if (other.tag == "Shop")
         {
-            if (buy)
-            {
-                payment = Instantiate(money, bandeja, transform.rotation);
-                payment.GetComponent<Item>().price = itemBuy.GetComponent<Item>().price;
-                payment.GetComponent<Item>().owner = "Customer";
-            }
-            else
-            {
-                payment = Instantiate(itemSell, bandeja, transform.rotation);
-                payment.GetComponent<Item>().owner = "Customer";
-            }
-
             if (CT == custType.Casual)
             {
-                active = true;
+                SetActive();
                 StartCoroutine(StartBusiness());
             }
             else
@@ -235,8 +225,27 @@ public class Customer : MonoBehaviour
         }
     }
 
+    public void DestroyPayment()
+    {
+        if (payment)
+        {
+            Destroy(payment);
+        }
+    }
+
     public void SetActive()
     {
+        if (buy)
+        {
+            payment = Instantiate(money, bandeja, transform.rotation);
+            payment.GetComponent<Item>().price = itemBuy.GetComponent<Item>().price;
+            payment.GetComponent<Item>().owner = "Customer";
+        }
+        else
+        {
+            payment = Instantiate(itemSell, bandeja, transform.rotation);
+            payment.GetComponent<Item>().owner = "Customer";
+        }
         active = true;
     }
 

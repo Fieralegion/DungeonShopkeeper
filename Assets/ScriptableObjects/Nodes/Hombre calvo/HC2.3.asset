@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: ??
   nextNode:
-  - {fileID: 11400000, guid: 18b71279ba98de74eb39cccc71bfdb4b, type: 2}
+  - {fileID: 11400000, guid: a27c473f9a2ea004b93c8680e220966b, type: 2}
   activated: 0
   item: {fileID: 0}
   value: 0
   r: 0
   c: 2
+  flag: 

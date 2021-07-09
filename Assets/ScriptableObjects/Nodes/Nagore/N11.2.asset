@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
-  m_Name: HC3.2
+  m_Name: N11.2
   m_EditorClassIdentifier: 
-  text: Eso!!! Quiero eso que esta ahi!
-  nextNode:
-  - {fileID: 11400000, guid: a6dc466120011624b8f59acf5a55f14f, type: 2}
-  - {fileID: 11400000, guid: aa59e33bd72dfb04db5ac01c6567299e, type: 2}
+  text: CREES QUE SOY UN IDIOTA? ESO NO ES LO QUE ME OFRECISTE! TE MALDIGO!!!
+  nextNode: []
   activated: 0
   item: {fileID: 0}
   value: 0
-  r: 1
+  r: 4
   c: 0
+  flag: 

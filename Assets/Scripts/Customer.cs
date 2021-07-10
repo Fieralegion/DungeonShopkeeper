@@ -11,7 +11,7 @@ public class Customer : MonoBehaviour
     public Dialogue dialogue;
      public DialogueNodes nextDialogue;
     [SerializeField] float leaveTime;
-    [SerializeField] GameObject money;
+    public GameObject money;
     public GameObject itemBuy, itemSell, otherItem;
     DialogueHandler textHandler;
     [SerializeField] bool buy, sell;
@@ -75,6 +75,7 @@ public class Customer : MonoBehaviour
                 }
                 else if (otherItem && item.GetComponent<Item>().itemName == otherItem.GetComponent<Item>().itemName)
                 {
+                    wrong = true;
                     if (!sell)
                     {
                         FinishTransaction(true);
@@ -85,7 +86,6 @@ public class Customer : MonoBehaviour
                     {
                         textHandler.SummonText(dialogue.RandomDialogue(textType.Sell), itemSell);
                     }
-                    wrong = true;
                     Destroy(item);
                     return true;
                 }

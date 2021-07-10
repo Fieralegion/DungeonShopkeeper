@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: A4-7
+  m_EditorClassIdentifier: 
+  text: "S\xED, y pude abrir desde dentro. Hab\xEDa una palanca, y hemos sido los
+    primeros en descubrirlo. \xBFY sabes lo mejor? Encontre la llave de cristal!"
+  nextNode:
+  - {fileID: 11400000, guid: 9f9c28cbdd5a8184aa57624b6e3ef160, type: 2}
+  activated: 0
+  value: 0
+  r: 0
+  c: 0
+  a: 0
+  flag: 

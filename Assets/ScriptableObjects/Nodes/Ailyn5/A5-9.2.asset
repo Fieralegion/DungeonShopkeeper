@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: A5-9.2
+  m_EditorClassIdentifier: 
+  text: Un placer hacer negocios.
+  nextNode:
+  - {fileID: 11400000, guid: 42b2a98d9d76de645a6f77a341c239af, type: 2}
+  - {fileID: 11400000, guid: 7291c0977e8a83142af03e16b145c8c9, type: 2}
+  activated: 0
+  value: 0
+  r: 1
+  c: 0
+  a: 0
+  flag: 

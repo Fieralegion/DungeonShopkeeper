@@ -12,6 +12,7 @@ public class CustomerSpawner : MonoBehaviour
     [SerializeField] GameObject[] customers;
     [SerializeField] CustomerList[] importantCustomers;
     [SerializeField] ItemList purchaseAvailable;
+    [SerializeField] Flags flag;
 
     [System.Serializable]
     public struct CustomerList
@@ -36,7 +37,14 @@ public class CustomerSpawner : MonoBehaviour
         GameObject cust;
         if (impIndex < importantCustomers.Length && gt.currentTime > importantCustomers[impIndex].time * 60)
         {
-            cust = importantCustomers[impIndex].customer;
+            if (importantCustomers[impIndex].customer.GetComponent<Customer>().dialogue.firstNode.a == EnumLib.available.Always || flag.CheckTag(importantCustomers[impIndex].customer.GetComponent<Customer>().dialogue.firstNode.flag))
+            {
+                cust = importantCustomers[impIndex].customer;
+            }
+            else
+            {
+                cust = customers[Random.Range(0, customers.Length)];
+            }
             impIndex++;
         }
         else

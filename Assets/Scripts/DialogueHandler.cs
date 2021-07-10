@@ -20,6 +20,7 @@ public class DialogueHandler : MonoBehaviour
 
     void Start()
     {
+        activeFlags.InitializeFlags();
         nodes = new DialogueNodes[3];
 
         ctImage = custText.transform.parent.GetComponent<Image>();
@@ -59,6 +60,7 @@ public class DialogueHandler : MonoBehaviour
 
     public void OptionPicker(int ind)
     {
+        nodes[ind].activated = true;
         if (nodes[ind].r == resutls.None)
         {
             TraverseDialogueTree(nodes[ind].nextNode[0]);
@@ -68,11 +70,11 @@ public class DialogueHandler : MonoBehaviour
             DeleteText();
             ExecuteResult(nodes[ind]);
         }
-        nodes[ind].activated = true;
     }
 
     public void OptionPicker(DialogueNodes dn)
     {
+        dn.activated = true;
         if (dn.r == resutls.None)
         {
             TraverseDialogueTree(dn.nextNode[0]);
@@ -82,7 +84,12 @@ public class DialogueHandler : MonoBehaviour
             DeleteText();
             ExecuteResult(dn.nextNode[0]);
         }
-        dn.activated = true;
+    }
+
+    IEnumerator OptionDelayed(DialogueNodes n)
+    {
+        yield return new WaitForSeconds(fadeSpeed);
+        OptionPicker(n);
     }
 
     public void TraverseDialogueTree(DialogueNodes dn)
@@ -102,29 +109,27 @@ public class DialogueHandler : MonoBehaviour
             {
                 if (CheckConditional(n))
                 {
-                    OptionPicker(n);
+                    StartCoroutine(OptionDelayed(n));
                     return;
                 }
             }
             for (int i = 0; i < dn.nextNode.Length; i++)
             {
-                if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None)
+                if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None && CheckAvailable(dn.nextNode[i]))
                 {
-                    Debug.Log(dn.nextNode[i].name);
                     int j = i;
                     nodes[j] = dn.nextNode[j];
                     failed = false;
                     canChoose = true;
-                    Debug.Log(canChoose);
                     SummonText(nodes[j].text, opImage[j], opTextt[j], false);
                 }
-            }
-            if (failed)
+        }
+        if (dn.r != resutls.None)
+        {
+            ExecuteResult(dn);
+        }
+        if (failed)
             {
-                if (dn.r != resutls.None)
-                {
-                    ExecuteResult(dn);
-                }
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
             }
@@ -157,7 +162,7 @@ public class DialogueHandler : MonoBehaviour
             }
             for (int i = 0; i < dn.nextNode.Length; i++)
             {
-                if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None)
+                if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None && CheckAvailable(dn.nextNode[i]))
                 {
                     int j = i;
                     nodes[j] = dn.nextNode[j];
@@ -165,17 +170,40 @@ public class DialogueHandler : MonoBehaviour
                     canChoose = true;
                     SummonText(nodes[j].text, opImage[j], opTextt[j], false);
                 }
-            }
-            if (failed)
+        }
+        if (dn.r != resutls.None)
+        {
+            ExecuteResult(dn);
+        }
+        if (failed)
             {
-                if (dn.r != resutls.None)
-                {
-                    ExecuteResult(dn);
-                }
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
             }
         //}
+    }
+
+    bool CheckAvailable(DialogueNodes node)
+    {
+        switch (node.a)
+        {
+            case available.Always:
+                return true;
+            case available.Flag:
+                return activeFlags.CheckTag(node.flag);
+            case available.Item:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return true;
+                    }
+                }
+                return inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
+            case available.Money:
+                return node.value <= inventory.money;
+        }
+        return true;
     }
 
     bool CheckConditional(DialogueNodes node)
@@ -193,6 +221,15 @@ public class DialogueHandler : MonoBehaviour
                     }
                 }
                 return inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
+            case conditionals.NoItem:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return false;
+                    }
+                }
+                return !inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
             case conditionals.ItemInFront:
                 foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
                 {
@@ -226,6 +263,14 @@ public class DialogueHandler : MonoBehaviour
                 break;
             case resutls.DeletePayment:
                 curCust.GetComponent<Customer>().DestroyPayment();
+                break;
+            case resutls.SwapSell:
+                GameObject temp = curCust.GetComponent<Customer>().itemSell;
+                curCust.GetComponent<Customer>().itemSell = curCust.GetComponent<Customer>().money;
+                curCust.GetComponent<Customer>().money = temp;
+                break;
+            case resutls.EditMoney:
+                curCust.GetComponent<Customer>().itemSell.GetComponent<Item>().price = node.value;
                 break;
         }
     }

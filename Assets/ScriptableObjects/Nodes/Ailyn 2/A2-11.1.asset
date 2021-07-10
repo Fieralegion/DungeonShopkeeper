@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: A2-11.1
+  m_EditorClassIdentifier: 
+  text: "Um\u2026 \xBFy si\u2026? \xA1Voy a buscar la carretilla! \xA1Gracias por
+    la informaci\xF3n!"
+  nextNode: []
+  activated: 0
+  value: 0
+  r: 3
+  c: 0
+  a: 0
+  flag: Ailyn3

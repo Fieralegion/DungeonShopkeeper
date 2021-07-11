@@ -16,10 +16,6 @@ public class Flags : ScriptableObject
         {
             tagList.Add(s, false);
         }
-        foreach (string s in tagList.Keys)
-        {
-            Debug.Log(s + " " + tagList[s]);
-        }
     }
 
     public bool CheckTag(string name)
@@ -27,7 +23,6 @@ public class Flags : ScriptableObject
         bool result;
         if (tagList.TryGetValue(name, out result))
         {
-            Debug.Log(name + " " + tagList[name]);
             return tagList[name];
         }
         else
@@ -43,7 +38,6 @@ public class Flags : ScriptableObject
         if (tagList.TryGetValue(name, out result))
         {
             tagList[name] = true;
-            Debug.Log(name + " " + tagList[name]);
         }
     }
 }

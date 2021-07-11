@@ -88,7 +88,7 @@ public class DialogueHandler : MonoBehaviour
 
     IEnumerator OptionDelayed(DialogueNodes n)
     {
-        yield return new WaitForSeconds(fadeSpeed);
+        yield return new WaitForSeconds(textboxLife/2);
         OptionPicker(n);
     }
 
@@ -128,10 +128,11 @@ public class DialogueHandler : MonoBehaviour
         {
             ExecuteResult(dn);
         }
-        if (failed)
+        if (failed && curCust)
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
+            curCust = null;
             }
 
         //}
@@ -175,11 +176,12 @@ public class DialogueHandler : MonoBehaviour
         {
             ExecuteResult(dn);
         }
-        if (failed)
+        if (failed && curCust)
             {
                 curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
                 GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
-            }
+            curCust = null;
+        }
         //}
     }
 
@@ -270,13 +272,14 @@ public class DialogueHandler : MonoBehaviour
                 curCust.GetComponent<Customer>().money = temp;
                 break;
             case resutls.EditMoney:
-                curCust.GetComponent<Customer>().itemSell.GetComponent<Item>().price = node.value;
+                curCust.GetComponent<Customer>().itemSell.GetComponent<Item>().sellPrice = node.value;
                 break;
         }
     }
 
     public void SummonText(string s, Image bubble, Text text, bool tb)
     {
+        StopAllCoroutines();
         text.text = TextAdjuster(s, " ");
         bubble.color = Color.white;
         text.color = Color.black;
@@ -288,7 +291,8 @@ public class DialogueHandler : MonoBehaviour
 
     public float SummonText(string s, GameObject item)
     {
-        ctText.text = TextAdjuster(s, item.name);
+        StopAllCoroutines();
+        ctText.text = TextAdjuster(s, item.GetComponent<Item>().itemName);
         ctImage.color = Color.white;
         ctText.color = Color.black;
         StartCoroutine(AutoFade(ctImage, ctText));

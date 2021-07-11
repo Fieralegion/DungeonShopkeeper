@@ -138,7 +138,7 @@ MonoBehaviour:
   leaveTime: 0
   money: {fileID: 359593932306976980, guid: 03d9a82b64ffb16489f39ee877495659, type: 3}
   itemBuy: {fileID: 0}
-  itemSell: {fileID: 3444471266261511945, guid: 04e936e635f9e3f4ca5da6b81244a0a8, type: 3}
+  itemSell: {fileID: 8101089852961695880, guid: 12fb69aad1652cc4ba12cbed1c9a3614, type: 3}
   otherItem: {fileID: 0}
   buy: 0
   sell: 1

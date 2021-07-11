@@ -136,7 +136,7 @@ MonoBehaviour:
   dialogue: {fileID: 11400000, guid: bc5c9ea197c328149b5d624d2a04c169, type: 2}
   nextDialogue: {fileID: 0}
   leaveTime: 0
-  money: {fileID: 2425400139774039503, guid: 2a7b59f182efa8b44a1128e318c4e413, type: 3}
+  money: {fileID: 6152281028395189095, guid: 49bafeb43c0692048831cb27d7efef2b, type: 3}
   itemBuy: {fileID: 3444471266261511945, guid: 04e936e635f9e3f4ca5da6b81244a0a8, type: 3}
   itemSell: {fileID: 359593932306976980, guid: 03d9a82b64ffb16489f39ee877495659, type: 3}
   otherItem: {fileID: 0}

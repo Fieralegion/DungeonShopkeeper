@@ -59,5 +59,14 @@ public class ItemList : ScriptableObject
         }
         return null;
     }
-    
+
+    public void Reset(ItemList it)
+    {
+        itemStorage = new GameObject[it.itemStorage.Length];
+        for (int i = 0; i < it.itemStorage.Length; i++)
+        {
+            itemStorage[i] = it.itemStorage[i];
+        }
+        money = it.money;
+    }
 }

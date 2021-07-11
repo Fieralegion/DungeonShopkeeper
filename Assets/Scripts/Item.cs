@@ -10,7 +10,7 @@ using UnityEditor;
 public class Item : MonoBehaviour
 {
     public string itemName;
-    public float price;
+    public float price, sellPrice;
     public itemType _item;
     [HideInInspector]
     public string owner;

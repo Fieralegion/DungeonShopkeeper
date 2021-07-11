@@ -16,4 +16,8 @@ MonoBehaviour:
   - {fileID: 3444471266261511945, guid: 04e936e635f9e3f4ca5da6b81244a0a8, type: 3}
   - {fileID: 2425400139774039503, guid: 2a7b59f182efa8b44a1128e318c4e413, type: 3}
   - {fileID: 2635640204630638233, guid: d339af8ee7b42674e8d6d3fe9aa1a2a0, type: 3}
+  - {fileID: 6152281028395189095, guid: 49bafeb43c0692048831cb27d7efef2b, type: 3}
+  - {fileID: 1336875276671996845, guid: c3ae669ec6593fb4aa354d04cc0c3904, type: 3}
+  - {fileID: 8101089852961695880, guid: 12fb69aad1652cc4ba12cbed1c9a3614, type: 3}
+  - {fileID: 8038228748596869950, guid: 668d041226b996546bd344aba88eb159, type: 3}
   money: 0

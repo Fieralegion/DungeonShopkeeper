@@ -101,10 +101,10 @@ public class Customer : MonoBehaviour
                 if (item.GetComponent<Item>().price == 0)
                 {
                     GameObject cash = GameObject.FindGameObjectWithTag("CashBox");
-                    if (cash.GetComponent<MoneySystem>().CheckMoney() >= itemSell.GetComponent<Item>().price)
+                    if (cash.GetComponent<MoneySystem>().CheckMoney() >= itemSell.GetComponent<Item>().sellPrice)
                     {
                         FinishTransaction(true);
-                        cash.GetComponent<MoneySystem>().ModifyMoney(-itemSell.GetComponent<Item>().price);
+                        cash.GetComponent<MoneySystem>().ModifyMoney(-itemSell.GetComponent<Item>().sellPrice);
                         payment.GetComponent<Item>().owner = "Shopowner";
                         Destroy(item);
                         return true;
@@ -116,10 +116,10 @@ public class Customer : MonoBehaviour
                         return false;
                     }
                 }
-                else if (item.GetComponent<Item>().price >= itemSell.GetComponent<Item>().price)
+                else if (item.GetComponent<Item>().price >= itemSell.GetComponent<Item>().sellPrice)
                 {
                     FinishTransaction(true);
-                    item.GetComponent<Item>().price -= itemSell.GetComponent<Item>().price;
+                    item.GetComponent<Item>().price -= itemSell.GetComponent<Item>().sellPrice;
                     payment.GetComponent<Item>().owner = "Shopowner";
                     return true;
                 }
@@ -194,6 +194,7 @@ public class Customer : MonoBehaviour
         active = true;
         if (payment) { Destroy(payment); }
         SetDestination(finalDestination);
+        GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(gameObject);
     }
 
     IEnumerator StartBusiness()

@@ -16,8 +16,8 @@ MonoBehaviour:
   nextNode:
   - {fileID: 11400000, guid: b58cf8c3a7f077c449e0669d7a52483e, type: 2}
   activated: 0
-  item: {fileID: 0}
   value: 0
-  r: 1
+  r: 0
   c: 0
+  a: 0
   flag: 

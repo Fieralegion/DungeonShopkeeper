@@ -9,8 +9,16 @@ using UnityEditor;
 [RequireComponent(typeof(Rigidbody))]
 public class Item : MonoBehaviour
 {
-    public float price;
+    public string itemName;
+    public float price, sellPrice;
     public itemType _item;
+    [HideInInspector]
+    public string owner;
+    [HideInInspector]
+    public bool active;
+
+    public AudioClip itemGrab;
+    public AudioClip itemDrop;
 }
 
 #if UNITY_EDITOR

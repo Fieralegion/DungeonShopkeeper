@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameManager;
 
 public class CamController : MonoBehaviour
 {
-    public GameObject player; // mover a libreria
+    public GameObject player;
     [SerializeField] private float _90DegreesRotationSpeed;
-    Quaternion targetRotation;
 
     [SerializeField] private float FPSRotationSpeed;
     private float xRotation = 0.0f;
@@ -15,12 +15,9 @@ public class CamController : MonoBehaviour
     private delegate void CamDelegate();
     private CamDelegate camDelegate;
 
-    public void Awake()
+    public void Start()
     {
-        targetRotation = player.transform.rotation;
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        GameSettings.DisableMouse();
 
         camDelegate += FPSCamMovement;
     }
@@ -31,13 +28,26 @@ public class CamController : MonoBehaviour
 
     void FPSCamMovement()
     {
-        float mouseX = Input.GetAxis("Mouse X") * FPSRotationSpeed;
-        float mouseY = Input.GetAxis("Mouse Y") * FPSRotationSpeed;
+        if (Time.timeScale == 1)
+        {
+            float mouseX = Input.GetAxis("Mouse X") * FPSRotationSpeed;
+            float mouseY = Input.GetAxis("Mouse Y") * FPSRotationSpeed;
 
-        yRotation -= mouseY;
-        xRotation += mouseX;
-        yRotation = Mathf.Clamp(yRotation, -80, 80);
+            yRotation -= mouseY;
+            xRotation += mouseX;
+            yRotation = Mathf.Clamp(yRotation, -80, 80);
 
-        transform.localEulerAngles= new Vector3(yRotation, xRotation, 0);
+            transform.localEulerAngles = new Vector3(yRotation, xRotation, 0);
+        }
+        if (GameSettings.gamePaused)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }

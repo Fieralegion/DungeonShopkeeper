@@ -11,6 +11,10 @@ TagManager:
   - RightBox
   - DialogueHandler
   - GlobalTimer
+  - Inventory
+  - Shop
+  - Restock
+  - Bandeja
   layers:
   - Default
   - TransparentFX

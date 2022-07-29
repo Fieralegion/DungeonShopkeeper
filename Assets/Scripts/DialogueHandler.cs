@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using EnumLib;
-//arreglar opciones de juego
 public class DialogueHandler : MonoBehaviour
 {
     [SerializeField] float textboxLife, fadeSpeed;
     [SerializeField] int maxLength;
     [SerializeField] GameObject custText, option1, option2, option3, item;
-    Image ctImage; 
+    [SerializeField] ItemList inventory;
+    [SerializeField] Flags activeFlags;
+    Image ctImage;
     Image[] opImage;
-    Text ctText; 
+    Text ctText;
     Text[] opTextt;
-    // Start is called before the first frame update
-    // make it world dialogue
+    DialogueNodes[] nodes;
+    bool canChoose;
+    GameObject curCust;
+
     void Start()
     {
+        activeFlags.InitializeFlags();
+        nodes = new DialogueNodes[3];
+
         ctImage = custText.transform.parent.GetComponent<Image>();
         opImage = new Image[3];
         opImage[0] = option1.transform.parent.GetComponent<Image>();
@@ -30,50 +36,234 @@ public class DialogueHandler : MonoBehaviour
         opTextt[2] = option3.GetComponent<Text>();
     }
 
-    public void TraverseDialogueTree(DialogueNodes dn)
+    private void LateUpdate()
     {
-        Debug.Log(dn.name);
-        DeleteText();
-        SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
-        bool failed = true ;
-        for (int i = 0; i < dn.nextNode.Length; i++)
+        if (canChoose)
         {
-            if (dn.nextNode[i] && !dn.nextNode[i].activated && CheckConditional(dn.nextNode[i].c))
+            if (Input.GetButtonDown("Option1") && nodes[0])
             {
-                SummonText(dn.nextNode[i].text, opImage[i], opTextt[i], false);
-                //Debug.Log(dn.nextNode[i].name + " : " + dn.nextNode[i].nextNode[0].name);
-                int j = i;
-                opImage[i].transform.GetComponent<Button>().onClick.AddListener(() => TraverseDialogueTree(dn.nextNode[j].nextNode[0]));
-                opImage[i].transform.GetComponent<Button>().onClick.AddListener(() => dn.nextNode[j].activated = true);
-                failed = false;
+                canChoose = false;
+                OptionPicker(0);
             }
-        }
-        if (failed)
-        {
-            GameObject.FindGameObjectWithTag("Spawner").GetComponent<CustomerSpawner>().CompleteFirstCustom();
+            else if (Input.GetButtonDown("Option2") && nodes[1])
+            {
+                canChoose = false;
+                OptionPicker(1);
+            }
+            else if (Input.GetButtonDown("Option3") && nodes[2])
+            {
+                canChoose = false;
+                OptionPicker(2);
+            }
         }
     }
 
-    bool CheckConditional(conditionals c)
+    public void OptionPicker(int ind)
     {
-        switch (c)
+        nodes[ind].activated = true;
+        if (nodes[ind].r == resutls.None)
+        {
+            TraverseDialogueTree(nodes[ind].nextNode[0]);
+        }
+        else
+        {
+            DeleteText();
+            ExecuteResult(nodes[ind]);
+        }
+    }
+
+    public void OptionPicker(DialogueNodes dn)
+    {
+        dn.activated = true;
+        if (dn.r == resutls.None)
+        {
+            TraverseDialogueTree(dn.nextNode[0]);
+        }
+        else
+        {
+            DeleteText();
+            ExecuteResult(dn.nextNode[0]);
+        }
+    }
+
+    IEnumerator OptionDelayed(DialogueNodes n)
+    {
+        yield return new WaitForSeconds(textboxLife / 2);
+        OptionPicker(n);
+    }
+
+    public void TraverseDialogueTree(DialogueNodes dn)
+    {
+        DeleteText();
+        StopAllCoroutines();
+        SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
+        bool failed = true;
+        foreach (DialogueNodes n in dn.nextNode)
+        {
+            if (CheckConditional(n))
+            {
+                StartCoroutine(OptionDelayed(n));
+                return;
+            }
+        }
+        for (int i = 0; i < dn.nextNode.Length; i++)
+        {
+            if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None && CheckAvailable(dn.nextNode[i]))
+            {
+                int j = i;
+                nodes[j] = dn.nextNode[j];
+                failed = false;
+                canChoose = true;
+                SummonText(nodes[j].text, opImage[j], opTextt[j], false);
+            }
+        }
+        if (dn.r != resutls.None)
+        {
+            ExecuteResult(dn);
+        }
+        if (failed && curCust)
+        {
+            curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
+            GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
+            curCust = null;
+        }
+    }
+
+    public void TraverseDialogueTree(GameObject go)
+    {
+        curCust = go;
+        DialogueNodes dn = go.GetComponent<Customer>().dialogue.firstNode;
+        DeleteText();
+        StopAllCoroutines();
+        SummonText(dn.text, custText.transform.parent.GetComponent<Image>(), custText.GetComponent<Text>(), false);
+        bool failed = true;
+        foreach (DialogueNodes n in dn.nextNode)
+        {
+            if (CheckConditional(n))
+            {
+                OptionPicker(n);
+                return;
+            }
+        }
+        for (int i = 0; i < dn.nextNode.Length; i++)
+        {
+            if (dn.nextNode[i] && !dn.nextNode[i].activated && dn.nextNode[i].c == conditionals.None && CheckAvailable(dn.nextNode[i]))
+            {
+                int j = i;
+                nodes[j] = dn.nextNode[j];
+                failed = false;
+                canChoose = true;
+                SummonText(nodes[j].text, opImage[j], opTextt[j], false);
+            }
+        }
+        if (dn.r != resutls.None)
+        {
+            ExecuteResult(dn);
+        }
+        if (failed && curCust)
+        {
+            curCust.GetComponent<Customer>().SetDestination(curCust.GetComponent<Customer>().finalDestination);
+            GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(curCust);
+            curCust = null;
+        }
+    }
+
+    bool CheckAvailable(DialogueNodes node)
+    {
+        switch (node.a)
+        {
+            case available.Always:
+                return true;
+            case available.Flag:
+                return activeFlags.CheckTag(node.flag);
+            case available.Item:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return true;
+                    }
+                }
+                return inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
+            case available.Money:
+                return node.value <= inventory.money;
+        }
+        return true;
+    }
+
+    bool CheckConditional(DialogueNodes node)
+    {
+        switch (node.c)
         {
             case conditionals.None:
-                return true;
-            case conditionals.Item: //Check if item is in storage or store
-                break;
-            case conditionals.ItemInFront: //Check if item is in front
-                break;
-            case conditionals.Money: //Check if character has enough money
-                break;
+                return false;
+            case conditionals.Item:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return true;
+                    }
+                }
+                return inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
+            case conditionals.NoItem:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return false;
+                    }
+                }
+                return !inventory.SearchItem(curCust.GetComponent<Customer>().itemBuy);
+            case conditionals.ItemInFront:
+                foreach (GameObject h in GameObject.FindGameObjectsWithTag("Attachment"))
+                {
+                    if (h.GetComponent<HookChecker>().front && h.GetComponent<HookChecker>().actualItem == curCust.GetComponent<Customer>().itemBuy.GetComponent<Item>().itemName)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            case conditionals.Money:
+                return node.value <= inventory.money;
+            case conditionals.Flag:
+                return activeFlags.CheckTag(node.flag);
         }
         return false;
     }
 
+    private void ExecuteResult(DialogueNodes node)
+    {
+        switch (node.r)
+        {
+            case resutls.BuySell:
+                curCust.GetComponent<Customer>().SetActive();
+                curCust.GetComponent<Customer>().nextDialogue = node;
+                break;
+            case resutls.Item:
+                Instantiate(curCust.GetComponent<Customer>().itemSell, curCust.GetComponent<Customer>().bandeja, curCust.transform.rotation);
+                break;
+            case resutls.ActivateFlag:
+                activeFlags.ModifyFlag(node.flag);
+                break;
+            case resutls.DeletePayment:
+                curCust.GetComponent<Customer>().DestroyPayment();
+                break;
+            case resutls.SwapSell:
+                GameObject temp = curCust.GetComponent<Customer>().itemSell;
+                curCust.GetComponent<Customer>().itemSell = curCust.GetComponent<Customer>().money;
+                curCust.GetComponent<Customer>().money = temp;
+                break;
+            case resutls.EditMoney:
+                curCust.GetComponent<Customer>().itemSell.GetComponent<Item>().sellPrice = node.value;
+                break;
+        }
+    }
+
     public void SummonText(string s, Image bubble, Text text, bool tb)
     {
-        //text.text = s;
-        text.text = TextAdjuster(s, null);
+        StopAllCoroutines();
+        text.text = TextAdjuster(s, " ");
         bubble.color = Color.white;
         text.color = Color.black;
         if (tb)
@@ -81,22 +271,15 @@ public class DialogueHandler : MonoBehaviour
             StartCoroutine(AutoFade(bubble, text));
         }
     }
-   /* public void SummonText(string s)
-    {
-        //text.text = s;
-        ctText.text = TextAdjuster(s);
-        ctImage.color = Color.white;
-        ctText.color = Color.black;
-        StartCoroutine(AutoFade(ctImage, ctText));
-    }*/
 
-    public void SummonText(string s, GameObject item)
+    public float SummonText(string s, GameObject item)
     {
-        //text.text = s;
-        ctText.text = TextAdjuster(s, item.name);
+        StopAllCoroutines();
+        ctText.text = TextAdjuster(s, item.GetComponent<Item>().itemName);
         ctImage.color = Color.white;
         ctText.color = Color.black;
         StartCoroutine(AutoFade(ctImage, ctText));
+        return textboxLife;
     }
 
     string TextAdjuster(string s, string name)
@@ -108,7 +291,7 @@ public class DialogueHandler : MonoBehaviour
         {
             compact[i + n] = temp[i];
             wpl++;
-            if (wpl == maxLength)
+            if (wpl >= maxLength && compact[i + n] == ' ')
             {
                 wpl = 0;
                 compact[i + n + 1] = '\n';

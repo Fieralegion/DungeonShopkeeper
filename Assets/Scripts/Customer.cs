@@ -3,26 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using EnumLib;
-[RequireComponent (typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class Customer : MonoBehaviour
 {
-    //trabajar modo de venta
-    public bool sale = false;
-
     public enum custType { Casual, Core, Hardcore };
     public custType CT;
-    [SerializeField] Dialogue dialogue;
+    public Dialogue dialogue;
+     public DialogueNodes nextDialogue;
     [SerializeField] float leaveTime;
-    public GameObject itemBuy, itemSell;
+    public GameObject money;
+    public GameObject itemBuy, itemSell, otherItem;
     DialogueHandler textHandler;
-    bool active, buy, sell;
-    Vector3 finalDestination;
+    [SerializeField] bool buy, sell;
+    protected bool active;
+    bool wrong;
+    public Vector3 finalDestination, bandeja;
     NavMeshAgent agent;
+    Animator anim;
+    GameObject payment;
 
     private void OnEnable()
     {
+        bandeja = GameObject.FindGameObjectWithTag("Bandeja").transform.position + new Vector3(0, 0.5f);
         agent = GetComponent<NavMeshAgent>();
         textHandler = GameObject.FindGameObjectWithTag("DialogueHandler").GetComponent<DialogueHandler>();
+        anim = GetComponentInChildren<Animator>();
+        anim.SetBool("isWalking", true);
+
         if (CT != custType.Hardcore)
         {
             StartCoroutine(Leave());
@@ -44,88 +51,132 @@ public class Customer : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            Time.timeScale = 0;
-        }
-        //StartCoroutine(TurnAround()); fix later
     }
-
-   /* IEnumerator TurnAround()
-    {
-        yield return new WaitForSeconds(3f);
-        Debug.Log("Rotated");
-        transform.Rotate(Vector3.Lerp(transform.forward, Vector3.right, 0.5f));
-    }*/
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (sale)
-        {
-            SetDestination(finalDestination);
-            if (CT == custType.Hardcore)
-            {
-                Time.timeScale = 1;
-            }
-        }
-        if (agent.remainingDistance <= 1 && active)
-        {
-            PlayDialogue(textType.Greeting);
-            active = false;
-        }
-    }
-
-    void PlayDialogue(textType t)
-    {
-        if (CT == custType.Casual)
-        {
-            textHandler.SummonText(dialogue.RandomDialogue(t), itemBuy);
-
-        }
-        else
-        {
-            textHandler.TraverseDialogueTree(dialogue.firstNode);
-        }
-    }
-
     public bool CompleteSale(GameObject item)
     {
-        if (buy && item.name == itemBuy.name)
+        if (active)
         {
-            //spawnear el dinero
-            if (!sell) { FinishTransaction();
-                Destroy(item);
+            if (buy)
+            {
+                if (item.GetComponent<Item>().itemName == itemBuy.GetComponent<Item>().itemName)
+                {
+                    if (!sell)
+                    {
+                        FinishTransaction(true);
+                        payment.GetComponent<Item>().owner = "Shopowner";
+                        payment.GetComponent<Item>().active = true;
+                    }
+                    else
+                    {
+                        textHandler.SummonText(dialogue.RandomDialogue(textType.Sell), itemSell);
+                        payment = Instantiate(itemSell, bandeja, transform.rotation);
+                        payment.GetComponent<Item>().owner = "Customer";
+                    }
+                    Destroy(item);
+                    return true;
+                }
+                else if (otherItem && item.GetComponent<Item>().itemName == otherItem.GetComponent<Item>().itemName)
+                {
+                    wrong = true;
+                    if (!sell)
+                    {
+                        FinishTransaction(true);
+                        payment.GetComponent<Item>().owner = "Shopowner";
+                        payment.GetComponent<Item>().active = true;
+                    }
+                    else
+                    {
+                        textHandler.SummonText(dialogue.RandomDialogue(textType.Sell), itemSell);
+                    }
+                    Destroy(item);
+                    return true;
+                }
+                else if (item.GetComponent<Item>()._item == itemType.Money && item.GetComponent<Item>().owner == "Customer")
+                {
+                    FinishTransaction(false);
+                    Destroy(payment);
+                }
             }
-            return true;
-        }
-        else if (item.name != itemBuy.name) //Que pasa al objeto si no es el correcto
-        {
-            Debug.Log("Wrong item!");
-            return false;
-        }
 
-        if (sell && item.GetComponent<Item>()._item == itemType.Money) //chequear la cantidad de dinero restante. Chequear si es un objeto de dinero
-        {
-            //das dinero
-            FinishTransaction();
-            return true;
-        }
-        else if (item.name != itemBuy.name) //Que pasa si le das otro objeto/no tienes dinero
-        {
-            return false;
-        }
+            if (sell && item.GetComponent<Item>()._item == itemType.Money)
+            {
+                if (item.GetComponent<Item>().price == 0)
+                {
+                    GameObject cash = GameObject.FindGameObjectWithTag("CashBox");
+                    if (cash.GetComponent<MoneySystem>().CheckMoney() >= itemSell.GetComponent<Item>().sellPrice)
+                    {
+                        FinishTransaction(true);
+                        cash.GetComponent<MoneySystem>().ModifyMoney(-itemSell.GetComponent<Item>().sellPrice);
+                        payment.GetComponent<Item>().owner = "Shopowner";
+                        Destroy(item);
+                        return true;
+                    }
+                    else
+                    {
+                        FinishTransaction(false);
+                        Destroy(payment);
+                        return false;
+                    }
+                }
+                else if (item.GetComponent<Item>().price >= itemSell.GetComponent<Item>().sellPrice)
+                {
+                    FinishTransaction(true);
+                    item.GetComponent<Item>().price -= itemSell.GetComponent<Item>().sellPrice;
+                    payment.GetComponent<Item>().owner = "Shopowner";
+                    return true;
+                }
+            }
+            else if (sell && item.GetComponent<Item>()._item != itemType.Money && item.GetComponent<Item>().owner == "Customer")
+            {
+                FinishTransaction(false);
+                Destroy(payment);
+            }
 
+            if (CT == custType.Casual && sell || buy)
+            {
+                FinishTransaction(false);
+                Destroy(payment);
+            }
+        }
         return false;
     }
 
-    void FinishTransaction()
+
+    void FinishTransaction(bool good)
     {
-        sale = true;
-        SetDestination(finalDestination);
-        if (CT == custType.Hardcore)
+        StopAllCoroutines();
+        if (CT == custType.Casual)
         {
-            Time.timeScale = 1;
+            buy = false;
+            sell = false;
+            if (good)
+            {
+                textHandler.SummonText(dialogue.RandomDialogue(textType.DepartHappy), itemBuy);
+            }
+            else
+            {
+                textHandler.SummonText(dialogue.RandomDialogue(textType.DepartAngry), itemBuy);
+            }
+            SetDestination(finalDestination);
+            GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(gameObject);
+        }
+        else
+        {
+            if (good)
+            {
+                if (!wrong)
+                {
+                    textHandler.TraverseDialogueTree(nextDialogue.nextNode[0]);
+                }
+                else
+                {
+                    textHandler.TraverseDialogueTree(nextDialogue.nextNode[2]);
+                }
+            }
+            else
+            {
+                textHandler.TraverseDialogueTree(nextDialogue.nextNode[1]);
+            }
         }
     }
 
@@ -134,21 +185,76 @@ public class Customer : MonoBehaviour
         agent.destination = pos;
     }
 
-    public void SetActive()
-    {
-        active = true;
-    }
-
     public void SetFinalDestination(Vector3 v)
     {
         finalDestination = v;
     }
-    
-
-     IEnumerator Leave()
+    IEnumerator Leave()
     {
-        yield return new  WaitForSeconds(leaveTime);
-        sale = true;
+        yield return new WaitForSeconds(leaveTime);
+        active = true;
+        if (payment) { Destroy(payment); }
         SetDestination(finalDestination);
+        GameObject.FindGameObjectWithTag("Respawn").GetComponent<CustomerSpawner>().MoveCustomer(gameObject);
+    }
+
+    IEnumerator StartBusiness()
+    {
+        yield return new WaitForSeconds(textHandler.SummonText(dialogue.RandomDialogue(textType.Greeting), itemBuy));
+        if (buy)
+        {
+            textHandler.SummonText(dialogue.RandomDialogue(textType.Buy), itemBuy);
+        }
+        else
+        {
+            textHandler.SummonText(dialogue.RandomDialogue(textType.Sell), itemSell);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Shop")
+        {
+            anim.SetBool("isWalking", false);
+
+            if (CT == custType.Casual)
+            {
+                SetActive();
+                StartCoroutine(StartBusiness());
+            }
+            else
+            {
+                textHandler.TraverseDialogueTree(gameObject);
+            }
+        }
+    }
+
+    public void DestroyPayment()
+    {
+        if (payment)
+        {
+            Destroy(payment);
+        }
+    }
+
+    public void SetActive()
+    {
+        if (buy)
+        {
+            payment = Instantiate(money, bandeja, transform.rotation);
+            payment.GetComponent<Item>().price = itemBuy.GetComponent<Item>().price;
+            payment.GetComponent<Item>().owner = "Customer";
+        }
+        else
+        {
+            payment = Instantiate(itemSell, bandeja, transform.rotation);
+            payment.GetComponent<Item>().owner = "Customer";
+        }
+        active = true;
+    }
+
+    public bool IsActive()
+    {
+        return active;
     }
 }

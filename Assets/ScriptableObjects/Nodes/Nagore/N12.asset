@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: N12
+  m_EditorClassIdentifier: 
+  text: "Es una piedra del pantano de los llantos. \xA1Ahora est\xE1s maldito! \xA1Por
+    irrespetuoso! \xA1MUAJAJAJAJA cof cof, cof MUA, cof cof, JAJAJAJA!"
+  nextNode: []
+  activated: 0
+  item: {fileID: 0}
+  value: 0
+  r: 3
+  c: 0
+  flag: Maldito

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8b2bfd991720842bed9ef28091f1f1, type: 3}
+  m_Name: Mannerly_Human
+  m_EditorClassIdentifier: 
+  greetingsD:
+  - "Saludos, se\xF1or tendero."
+  - "Hola, amable se\xF1or."
+  - Saludos.
+  - "\xBFQu\xE9 tal, buen se\xF1or?"
+  - Hola, bonita tienda.
+  - "Buen d\xEDa, caballero."
+  buy:
+  - "Necesito una xxx, \xBFpodr\xEDa usted despach\xE1rmelo?"
+  - Necesito obtener una xxx.
+  - "\xBFDispone usted de alguna xxx?"
+  - "\xBFPuede despacharme una xxx?"
+  - "Disculpe, ven\xEDa buscando una xxx."
+  - "\xBFMe vender\xEDa una xxx, por favor?"
+  sell:
+  - "Encontr\xE9 esta xxx, pero llevo excedente. \xBFQuerr\xEDa usted adquirirlo?"
+  - "Me gustar\xEDa vender esto. Por un precio justo, por supuesto."
+  - "\xBFQu\xE9 podr\xEDa ofrecerme por esto, caballero?"
+  - "\xBFLe gustar\xEDa adquirir esta xxx?"
+  happy:
+  - "Muy amable se\xF1or, gracias y que pase un buen d\xEDa."
+  - "Gracias, buen d\xEDa."
+  - Gracias, y bonita tienda.
+  angry:
+  - "Oh, qu\xE9 desfachatez de sitio."
+  firstNode: {fileID: 0}

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8b2bfd991720842bed9ef28091f1f1, type: 3}
+  m_Name: Normal_Human
+  m_EditorClassIdentifier: 
+  greetingsD:
+  - "\xA1Hola!"
+  - Buenas.
+  - "\xBFQu\xE9 tal?"
+  - "\xBFQu\xE9 pasa amigo?"
+  - Hola holita.
+  - Buenaaaaassss.
+  - "\xBFQu\xE9 hay?"
+  - Ey.
+  - "\xBFQu\xE9 marcha me llevas?"
+  - "\xBFC\xF3mo est\xE1s?"
+  buy:
+  - "Me gustar\xEDa comprar una xxx."
+  - "\xBFTienes alguna xxx? La siguiente sala es complicada."
+  - "Necesito una xxx para el siguiente nivel, \xBFte queda alguna?"
+  - "\xBFMe pone una xxx, por favor?"
+  - A ver... me das... esa xxx, por favor.
+  - "Mmm... esa xxx tiene buena pinta... d\xE1mela anda."
+  - "\xA1Una xxx! Llevo un rato buscando una."
+  - "\xBFEsa xxx est\xE1 a la venta? Quiero una."
+  - Ponme una xxx, hermoso.
+  - "\xBFMe vende una xxx? Pago a tocateja."
+  sell:
+  - "Me gustar\xEDa vender esta xxx."
+  - "\xBFQu\xE9 me das por esta xxx?"
+  - "\xA1Le vendo esta xxx! Tanta quest para esto, pf."
+  - Esta xxx es horrible, no la quiero, se la vendo.
+  - "Quiero vender esta xxx. Est\xE1 nueva, tiene dos meses."
+  - "Le vendo esto. Si la limpia un poco est\xE1 como nueva."
+  - "\xBFVes esto? Pues para ti, te lo dejo barato."
+  - "Por unos cuantos mazm\xF3lares te quedas con esto."
+  - "Me sobra esta xxx, \xBFme la comprar\xEDa?"
+  - "Un bicho drope\xF3 esto, pero voy cargad\xEDsimo. \xBFLo quieres?"
+  happy:
+  - "\xA1Perfecto, gracias!"
+  - "\xA1Un placer!"
+  - De lujo, nos vemos.
+  - Voy a ser el terror de los mazmitos.
+  - Chupi.
+  - Gracias majo.
+  - Un placer hacer negocios.
+  - "\xA1Genial, a por el siguiente nivel!"
+  - "Much\xEDsimas gracias, me has salvado la vida."
+  - "Genial, me voy a seguir con lo m\xEDo."
+  angry:
+  - Vaya timo de tienda.
+  - Pienso puntuarte con 0 mazmorrines en la A.M.M.M.
+  - Pues que te zurzan.
+  - Pffffffffffffffffffffff.
+  - No me voy nada contento.
+  - "Te destrozar\xEDa la tienda... si no estuviera tan cansado."
+  - "Pues qu\xE9 pena."
+  - "Nada entonces, adi\xF3s."
+  - Vale, gracias. Por nada.
+  - "Buscar\xE9 otra tienda mejor en el siguiente nivel."
+  firstNode: {fileID: 0}

@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemList", menuName = "ScriptableObjects/ItemList", order = 5)]
 public class ItemList : ScriptableObject
 {
-    //Como chequeas los objetos colgando
     public GameObject[] itemStorage;
+    public float money;
 
     public void AddItem(GameObject i)
     {
@@ -22,14 +22,12 @@ public class ItemList : ScriptableObject
         int n = 0;
         for (int j = 0; j < tempStorage.Length; j++)
         {
-            if (i.name == itemStorage[j].name && n == 0)
+
+            if (i.GetComponent<Item>().itemName == itemStorage[j].GetComponent<Item>().itemName && n == 0)
             {
-                n++;
+                n = n + 1;
             }
-            else
-            {
-                tempStorage[j - n] = itemStorage[j];
-            }
+            tempStorage[j] = itemStorage[j + n];
         }
 
         itemStorage = tempStorage;
@@ -39,8 +37,36 @@ public class ItemList : ScriptableObject
     {
         foreach (GameObject t in itemStorage)
         {
-            if (t.name == i.name) return true;
+            if (t.GetComponent<Item>().itemName == i.GetComponent<Item>().itemName) return true;
         }
         return false;
+    }
+
+    public bool SearchItem(string i)
+    {
+        foreach (GameObject t in itemStorage)
+        {
+            if (t.GetComponent<Item>().itemName == i) return true;
+        }
+        return false;
+    }
+
+    public GameObject SpawnItem(string name)
+    {
+        foreach (GameObject t in itemStorage)
+        {
+            if (t.GetComponent<Item>().itemName == name) return t;
+        }
+        return null;
+    }
+
+    public void Reset(ItemList it)
+    {
+        itemStorage = new GameObject[it.itemStorage.Length];
+        for (int i = 0; i < it.itemStorage.Length; i++)
+        {
+            itemStorage[i] = it.itemStorage[i];
+        }
+        money = it.money;
     }
 }

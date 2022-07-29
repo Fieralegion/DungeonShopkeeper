@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9a2b6b8775b810448d965d1e29f9dfe, type: 3}
+  m_Name: N7
+  m_EditorClassIdentifier: 
+  text: "S\xED, po-por favor. Entre la carretilla y los mazmitos casi me matan. \xBFNo
+    tendr\xE1 alg\xFAn amuleto que cure mi alma de sus maldiciones?"
+  nextNode:
+  - {fileID: 11400000, guid: 68717df4eec21fe4aa49931a91e923bd, type: 2}
+  - {fileID: 11400000, guid: e2793734fd0bb284faa83d7854cb4f03, type: 2}
+  - {fileID: 11400000, guid: 59730d0c791b2d24685e5912d3f059da, type: 2}
+  activated: 0
+  item: {fileID: 0}
+  value: 0
+  r: 0
+  c: 0
+  flag: 
